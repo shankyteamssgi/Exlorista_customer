@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:id="@+id/navBarUserDetailsLL"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/navBarUserDisplayNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBodyText"
+            android:text="Shashank Kushwaha"/>
+        <TextView
+            android:id="@+id/navBarUserEmailTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBodyText"
+            android:text="skvit001@gmail.com"/>
+        <TextView
+            android:id="@+id/navBarUserPhoneTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBodyText"
+            android:text="+91-8770415342"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/navLoginB"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="login"
+            android:visibility="visible"/>
+
+        <Button
+            android:id="@+id/navSignupB"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="sign up"
+            android:visibility="visible"/>
+
+        <Button
+            android:id="@+id/navSignoutB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Signout"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Explorista</string>
+    <string name="navigation_drawer_open">open navigation drawer</string>
+    <string name="navigation_drawer_close">close navigation drawer</string>
+    <string name="facebook_app_id">2823099317738805</string>
+    <string name="facebook_application_id">2823099317738805</string>
+    <string name="fb_login_protocol_scheme">fb2823099317738805</string>
+    <string name="account_already_exists">Account already exists. Try signing up with a different account.</string>
+    <string name="phone_already_exists">Phone no already exists. Try signing up with a different phone no.</string>
+    <string name="phone_does_not_exist">Phone no does not exist.</string>
+    <string name="failed_user_addition_to_db">Failed adding user to database.</string>
+</resources>

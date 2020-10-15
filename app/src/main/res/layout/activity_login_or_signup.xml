@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".loginOrSignup">
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signInGoogleNewwSIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/signInFacebookNewwLB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/loginOrSignupHeadingLL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp">
+        <TextView
+            android:id="@+id/loginTV"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:background="@color/colorActionBarBackground"
+            android:textColor="@color/colorActionBarTitleText"
+            android:textStyle="normal"
+            android:textSize="18dp"
+            android:text="LOG IN"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="|"/>
+        <TextView
+            android:id="@+id/signupTV"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorProductBrand"
+            android:textSize="14dp"
+            android:text="SIGN UP"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/continueWithGoogleLL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/loginOrSignupHeadingLL"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/border_store_page">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:src="@drawable/google_icon_round"
+            android:paddingLeft="5dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.9"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorBodyText"
+            android:text="Continue with Google" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/continueWithFacebookLL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/continueWithGoogleLL"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/border_store_page">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:src="@drawable/facebook_icon_round"
+            android:paddingLeft="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.9"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorBodyText"
+            android:text="Continue with Facebook" />
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/orNewwTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/continueWithFacebookLL"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/top_bottom_border"
+        android:textColor="@color/colorBodyText"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="OR"/>
+
+    <LinearLayout
+        android:id="@+id/phoneLoginNewwLL"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/orNewwTV"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.18"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/phoneNoNewwET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter 10 digit phone no" />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/phoneLoginNewwB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login with OTP"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "209617280823",
+    "firebase_url": "https://exlorista.firebaseio.com",
+    "project_id": "exlorista",
+    "storage_bucket": "exlorista.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209617280823:android:abdc42f3b48153966ec4b2",
+        "android_client_info": {
+          "package_name": "e.a.exlorista_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209617280823-qi6ouophpj8sjqu80cv562i3l1u3rls9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "e.a.exlorista_customer",
+            "certificate_hash": "6eb343b7ede7250a6ee8b325482b949a56fea876"
+          }
+        },
+        {
+          "client_id": "209617280823-5sp7qk662s87hrua7b81ra3lfkc99h0o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "e.a.exlorista_customer",
+            "certificate_hash": "715a0d938c61dc20bd69c26ad6272f1ab45cf5ac"
+          }
+        },
+        {
+          "client_id": "209617280823-f75o69o5tgp5i8gje0vbmkcuc6hqfqfr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV2k3FRCCbFVFR-DFqf4atE1RUK6xTWLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209617280823-f75o69o5tgp5i8gje0vbmkcuc6hqfqfr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

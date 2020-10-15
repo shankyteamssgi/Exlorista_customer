@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".signinorup">
+
+    <TextView
+        android:id="@+id/signInHeadingTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:text="Sign in"/>
+
+    <LinearLayout
+        android:id="@+id/googleFbLoginLL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/orTV"
+        app:layout_constraintTop_toBottomOf="@id/signInHeadingTV"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp">
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/signInGoogleSIB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/signInFacebookLB"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/testRegisterCallbackB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/orTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/top_bottom_border"
+        android:textColor="@color/colorBodyText"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="OR"/>
+
+    <LinearLayout
+        android:id="@+id/phoneLoginLL"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/orTV"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.15">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/phoneNoET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter 10 digit phone no" />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/phoneLoginB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Signin with OTP"/>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/hamburger_menu"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_cart"
+            android:title="Cart"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_orderHistory"
+            android:icon="@drawable/ic_order_history"
+            android:title="Order history"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_addressBook"
+            android:icon="@drawable/ic_address_book"
+            android:title="Address book"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_paymentMethods"
+            android:icon="@drawable/ic_payment_methods"
+            android:title="Payment methods"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_wallet"
+            android:title="Wallet"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_bookmarked_stores"
+            android:icon="@drawable/ic_bookmarked_stores"
+            android:title="Bookmarked stores"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_help_and_support"
+            android:icon="@drawable/ic_help_and_support"
+            android:title="Help and support"
+            android:visible="false"/>
+        <item
+            android:id="@+id/nav_about_us"
+            android:title="About us"
+            android:visible="false"/>
+    </group>
+
+</menu>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/bottom_border">
+
+    <ImageView
+        android:id="@+id/cartProductIV"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/cartProdAttrsContainer"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintStart_toEndOf="@id/cartProductIV"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingRight="0dp"
+        android:paddingEnd="0dp">
+        <TextView
+            android:id="@+id/cartProductBrandTV"
+            android:textColor="@color/colorProductBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cartProductNameTV"
+            android:textColor="@color/colorBodyText"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
+
+        <TextView
+            android:id="@+id/cartProductSizeUnitContainerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
+
+        <TextView
+            android:id="@+id/cartProductMrpTV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
+
+        <TextView
+            android:id="@+id/cartProductPriceTV"
+            android:textColor="@color/colorBodyText"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cartProdAddFeature"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/cartProdAttrsContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <Button
+            android:id="@+id/cartAddOneMoreProdB"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.28"
+            android:layout_gravity="top"
+            android:textStyle="bold"
+            android:text="+" />
+        <TextView
+            android:id="@+id/cartThisProdCountIV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.28"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1"/>
+        <Button
+            android:id="@+id/cartRemoveOneProdB"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.28"
+            android:textStyle="bold"
+            android:text="-"/>
+        <TextView
+            android:id="@+id/cartThisItemTotalCostTV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.16"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

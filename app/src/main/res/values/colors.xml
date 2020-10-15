@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <!--<color name="colorPrimary">#ffffff</color>-->
+    <color name="colorActionBarTitleText">#ffffff</color>
+    <color name="colorActionBarBackground">#0692f5</color>
+    <color name="colorBodyText">#000000</color>
+    <color name="colorBorderRVItem">#808080</color>
+    <color name="colorProductBrand">#969696</color>
+    <color name="colorItemTVinCartActivity">#e1e1e1</color>
+    <color name="colorTransparent">#00000000</color>
+
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+
+    <color name="colorPrimaryDark">#32000000</color>
+    <color name="colorAccent">#FF4081</color>
+</resources>
