@@ -10,6 +10,11 @@ import android.widget.Spinner;
 
 public class addAddress extends AppCompatActivity {
 
+    enum userPermissionResponse{LOCATION_NOT_ENABLED,PERMISSION_DENIED,PERMISSION_DENIED_WITH_NEVERASKAGAIN};
+    // Location
+    private static final int REQUEST_CODE_LOCATION_PERMISSION=1;
+    private static final int REQUEST_CHECK_SETTINGS=2;
+
     private EditText completeAddressET,addressLandmarkET,addOtherTagET;
     private Spinner stateSpinner,citySpinner,areaSpinner;
     private Button homeTagB,officeTagB,saveAddressB;
