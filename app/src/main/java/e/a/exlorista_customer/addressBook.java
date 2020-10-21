@@ -1,10 +1,12 @@
 package e.a.exlorista_customer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 
 public class addressBook extends AppCompatActivity {
@@ -29,6 +31,15 @@ public class addressBook extends AppCompatActivity {
 
         addNewAddressB=findViewById(R.id.addNewAddressB);
         addressListRV=findViewById(R.id.addressListRV);
+
+        addNewAddressB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addressBookToAddAddressIntent=new Intent(addressBook.this,addAddress.class);
+                startActivity(addressBookToAddAddressIntent);
+            }
+        });
+
         addressListRVLayoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         addressListRVAdapter=new AddressBookAdapter(this);
         addressListRV.setLayoutManager(addressListRVLayoutManager);

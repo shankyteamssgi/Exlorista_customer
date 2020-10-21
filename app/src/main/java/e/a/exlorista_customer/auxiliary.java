@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -27,6 +28,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -119,6 +121,16 @@ class auxiliary{
     static String PPV_REQUESTTYPE_ADDRESSBOOKFETCH="51";
     static String PPV_REQUESTTYPE_ADDRESSDELETE="52";
     static String PPV_REQUESTTYPE_ADDRESSEDIT="53";
+
+    // addAddress.java
+    static String PPK_STATEID="stateId";
+    static String PPK_CITYID="cityId";
+    static String PPV_REQUESTTYPE_ADDRESSAREADATAFETCH="54";
+    static String PPV_REQUESTTYPE_ADDRESSCITYDATAFETCH="55";
+    static String PPV_REQUESTTYPE_ADDRESSSTATEDATAFETCH="56";
+    static String SPINNER_UNSELECTED_STATE="Select state";
+    static String SPINNER_UNSELECTED_CITY="Select city";
+    static String SPINNER_UNSELECTED_AREA="Select area";
 
     // MainActivity.java -> loginOrSignup.java
     final static String NAVBUTTON_CLICKED="navButton_clicked";
@@ -250,6 +262,41 @@ class auxiliary{
             sb.append(delimiter).append(arrayListStr.get(i));
         }
         return sb.toString().trim();
+    }
+
+    static ArrayList<String> arrayListOfHMtoArrayListOfHMVals(ArrayList<HashMap<String,String>> ah){
+        // Utility in addAddress.java
+        // Takes : ArrayList<HashMap<String,String>>
+        // Returns : ArrayList of values of HashMap
+        // For eg, ah = ArrayList<HashMap1, HashMap2, HashMap3...HashMapi............HashMapn>, Where, HashMapi only has one (key,value) pair
+        // passing ah to this method would return ah_return = ArrayList<HashMap1_value, HashMap2_value, HashMap3_value.......>
+        ArrayList<String> ah_return=new ArrayList<String>();
+        for(int i=0;i<ah.size();i++){
+            //ah_return.add((new ArrayList<>(ah.get(i).values())).get(0));
+            //ah_return.add(ah.get(i).values().iterator().toString());
+            ah_return.add(ah.get(i).values().iterator().next());
+        }
+        return ah_return;
+    }
+
+    static ArrayList<String> strToArrayList(String str,String delimiter){
+        return new ArrayList<String>(Arrays.asList(str.split(delimiter)));
+    }
+
+    static boolean gpsEnabled(Context context){
+        boolean gps_enabled=false;
+        LocationManager locationManager=(LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        try{
+            if(locationManager!=null){
+                gps_enabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } else{
+                Log.i("LOCATION","locationManager is null");
+            }
+        } catch (Exception e){
+            Log.i("LOCATION","Exception occurred");
+            e.printStackTrace();
+        }
+        return gps_enabled;
     }
 
 }

@@ -8,6 +8,7 @@
     android:layout_marginStart="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginEnd="10dp"
+    android:layout_marginTop="15dp"
     tools:context="e.a.exlorista_customer.addAddress">
 
     <LinearLayout
@@ -44,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:text="State"/>
             <Spinner
                 android:id="@+id/stateSpinner"
@@ -62,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:text="City"/>
             <Spinner
                 android:id="@+id/citySpinner"
@@ -79,7 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:text="Area"/>
             <Spinner
                 android:id="@+id/areaSpinner"
@@ -99,23 +100,41 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:gravity="center"
+            android:textSize="16dp"
             android:text="Choose a tag"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/homeTagB"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:id="@+id/homeTagLL"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"
-                android:text="Home"/>
-            <Button
-                android:id="@+id/officeTagB"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorBodyText"
+                    android:text="Home"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/officeTagLL"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"
-                android:text="Office"/>
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorBodyText"
+                    android:text="Office"/>
+            </LinearLayout>
         </LinearLayout>
         <TextView
             android:id="@+id/orTextAddAddressTV"
@@ -123,8 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:textColor="@color/colorBodyText"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="OR"/>
         <EditText
             android:id="@+id/addOtherTagET"
