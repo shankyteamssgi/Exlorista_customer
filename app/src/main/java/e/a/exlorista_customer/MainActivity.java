@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();*/
+        navigationView.setNavigationItemSelectedListener(this);
 
         //Navigation Drawer
         setUpToolbar();
@@ -153,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Drawable d = ResourcesCompat.getDrawable(getResources(), R.drawable.menu, null);
         toolbar.setNavigationIcon(d);
 
-
     }
     //Navigation Drawer Close
 
@@ -168,7 +168,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+        Log.i("DEBUG-MainActivity","inside onNavigationItemSelected");
+
         if(item.getItemId()==IDHamburgerOption.get("cart")){
+            Log.i("DEBUG-MainActivity","cart, click detected");
             startActivity(new Intent(this,cart.class));
             drawer.closeDrawer(GravityCompat.START);
         }

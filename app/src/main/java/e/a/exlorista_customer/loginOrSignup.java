@@ -72,7 +72,7 @@ public class loginOrSignup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_or_signup);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         auxiliaryuseraccountmanager.LoggedInWith loggedInWith=auxiliaryuseraccountmanager.userSignedIn(mContext);
         String signInStatus=auxiliaryuseraccountmanager.getSignInStatus(mContext);
