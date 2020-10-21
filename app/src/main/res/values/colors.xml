@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#2B32B2</color>
     <!--<color name="colorPrimary">#ffffff</color>-->
     <color name="colorActionBarTitleText">#ffffff</color>
     <color name="colorActionBarBackground">#0692f5</color>
@@ -12,6 +12,11 @@
 
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
 
-    <color name="colorPrimaryDark">#32000000</color>
+    <color name="colorPrimaryDark">#2B32B2</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="redColor">#ed5a6b</color>
+    <color name="greenColor">#1fb141</color>
+    <color name="blackColor">#000000</color>
+    <color name="whiteColor">#ffffff</color>
+    <color name="fadeBlack">#696969</color>
 </resources>

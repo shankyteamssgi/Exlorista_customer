@@ -33,12 +33,18 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:text="Status"/>
         <TextView
             android:id="@+id/orderStatusOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:gravity="right"/>
     </LinearLayout>
@@ -53,12 +59,18 @@
             android:id="@+id/itemsOrderHistoryTextTV"
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:text="Items"/>
         <TextView
             android:id="@+id/itemsListOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:gravity="right">
         </TextView>
@@ -73,12 +85,18 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:text="Ordered on"/>
         <TextView
             android:id="@+id/orderDateTimeOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:gravity="right"/>
     </LinearLayout>
@@ -92,12 +110,18 @@
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.3"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:text="Grand total"/>
         <TextView
             android:id="@+id/orderGrandTotalOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:gravity="right"/>
     </LinearLayout>
@@ -106,6 +130,10 @@
         android:id="@+id/orderActionOrderHistoryB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/gradient_button"
+        android:textColor="@color/whiteColor"
+        android:fontFamily="@font/comfortaa_bold"
         app:layout_constraintTop_toBottomOf="@+id/orderGrandTotalOrderHistoryLL"
         android:text="Repeat order"/>
 

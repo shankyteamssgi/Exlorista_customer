@@ -21,9 +21,9 @@ public class addressBook extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_book);
 
-        setTitle("Address book");
+        /*setTitle("Address book");
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         mContext=this;
 

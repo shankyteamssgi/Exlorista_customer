@@ -1,22 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorActionBarBackground</item>
         <item name="titleTextColor">@color/colorActionBarTitleText</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
     </style>
 
-    <style name="AppTheme.CustomActionBar">
-        <item name="colorPrimary">@color/colorActionBarBackground</item>
-        <item name="titleTextColor">@color/colorActionBarTitleText</item>
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+    <!-- <style name="AppTheme.CustomActionBar">
+         <item name="colorPrimary">@color/colorActionBarBackground</item>
+         <item name="titleTextColor">@color/colorActionBarTitleText</item>
+     </style>-->
 
-</resources>
+      <style name="AppTheme.NoActionBar">
+         <item name="windowActionBar">false</item>
+         <item name="windowNoTitle">true</item>
+          <item name="colorPrimaryDark">@color/colorPrimary</item>
+          <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+          <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+          <item name="android:navigationBarColor">@color/colorPrimary</item>
+     </style>
+
+ </resources>

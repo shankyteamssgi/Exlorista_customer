@@ -41,9 +41,9 @@ public class liveOrderStatus extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_order_status);
 
-        setTitle("Live order status");
+        /*setTitle("Live order status");
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         mContext=this;
 

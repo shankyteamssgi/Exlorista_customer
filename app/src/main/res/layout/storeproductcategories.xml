@@ -8,6 +8,17 @@
     <Button
         android:id="@+id/storeProductCategoryB"
         android:layout_width="wrap_content"
-        android:layout_height="50dp" />
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/subcategory_button"
+        android:fontFamily="@font/comfortaa_bold"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
