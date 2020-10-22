@@ -3,8 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <!--<color name="colorPrimary">#ffffff</color>-->
     <color name="colorActionBarTitleText">#ffffff</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorActionBarBackground">#0692f5</color>
     <color name="colorBodyText">#000000</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorBorderRVItem">#808080</color>
     <color name="colorProductBrand">#969696</color>
     <color name="colorItemTVinCartActivity">#e1e1e1</color>

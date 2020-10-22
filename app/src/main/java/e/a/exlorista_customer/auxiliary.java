@@ -125,12 +125,20 @@ class auxiliary{
     // addAddress.java
     static String PPK_STATEID="stateId";
     static String PPK_CITYID="cityId";
+    static String PPK_AREAID="areaId";
+    static String PPK_ADDRCOMPLETE="addrComplete";
+    static String PPK_ADDRLANDMARK="addrLandmark";
+    static String PPK_ADDRTAG="addrTag";
     static String PPV_REQUESTTYPE_ADDRESSAREADATAFETCH="54";
     static String PPV_REQUESTTYPE_ADDRESSCITYDATAFETCH="55";
     static String PPV_REQUESTTYPE_ADDRESSSTATEDATAFETCH="56";
+    static String PPV_REQUESTTYPE_ADDRESSADD="57";
     static String SPINNER_UNSELECTED_STATE="Select state";
     static String SPINNER_UNSELECTED_CITY="Select city";
     static String SPINNER_UNSELECTED_AREA="Select area";
+    static int COMPLETEADDRESS_MAXLENGTH=255;
+    static int LANDMARK_MAXLENGTH=50;
+    static int CUSTOMTAG_MAXLENGTH=30;
 
     // MainActivity.java -> loginOrSignup.java
     final static String NAVBUTTON_CLICKED="navButton_clicked";

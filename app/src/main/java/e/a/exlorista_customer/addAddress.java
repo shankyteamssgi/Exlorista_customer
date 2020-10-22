@@ -1,23 +1,33 @@
 package e.a.exlorista_customer;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.gson.JsonArray;
@@ -50,9 +60,12 @@ public class addAddress extends AppCompatActivity {
     private Spinner stateSpinner,citySpinner,areaSpinner;
     private Button saveAddressB;
     private LinearLayout cityChoiceLL,stateChoiceLL,homeTagLL,officeTagLL;
+    private TextView homeTagTextTV,officeTagTextTV;
     private ArrayList<HashMap<String,String>> stateData;
     private ArrayList<HashMap<String,String>> cityData;
     private ArrayList<HashMap<String,String>> areaData;
+    enum addressTag{HOME,OFFICE,CUSTOM_TAG};
+    addressTag selectedAddressTag;
     LocationRequest locationRequest;
     private Context mContext;
 
@@ -75,13 +88,16 @@ public class addAddress extends AppCompatActivity {
         areaSpinner=findViewById(R.id.areaSpinner);
         homeTagLL=findViewById(R.id.homeTagLL);
         officeTagLL=findViewById(R.id.officeTagLL);
+        homeTagTextTV=findViewById(R.id.homeTagTextTV);
+        officeTagTextTV=findViewById(R.id.officeTagTextTV);
         saveAddressB=findViewById(R.id.saveAddressB);
         cityChoiceLL=findViewById(R.id.cityChoiceLL);
         stateChoiceLL=findViewById(R.id.stateChoiceLL);
-
-        //homeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.border_store_page));
+        selectedAddressTag=null;
 
         initializeGeographyData(true,true,true);
+        initializeAddressTagButtons();
+        addListenersToTagViews();
 
         if(auxiliary.gpsEnabled(mContext)){
             // GPS is enabled
@@ -182,21 +198,135 @@ public class addAddress extends AppCompatActivity {
         });
     }
 
+    private void addAddressByValidationToDb(String urlWebService){
+        if(validateInput()){
+            // fetch relevant address fields from views
+            String address_complete=completeAddressET.getText().toString().trim();
+            String address_landmark=addressLandmarkET.getText().toString().trim();
+            String address_stateId=stateData.get(stateSpinner.getSelectedItemPosition()).get("state_id");
+            String address_cityId=cityData.get(citySpinner.getSelectedItemPosition()).get("city_id");
+            String address_areaId=areaData.get(areaSpinner.getSelectedItemPosition()).get("area_id");
+            StringBuilder address_tag=new StringBuilder();
+            switch (selectedAddressTag){
+                case HOME:
+                    address_tag.append("home");
+                    break;
+                case OFFICE:
+                    address_tag.append("office");
+                    break;
+                case CUSTOM_TAG:
+                    address_tag.append(addOtherTagET.getText().toString().trim());
+                    break;
+            }
+            // add address to database
+            addAddressToDb(urlWebService
+                    ,address_complete
+                    ,address_landmark
+                    ,address_stateId
+                    ,address_cityId
+                    ,address_areaId
+                    ,address_tag.toString().trim());
+        } else{
+            // don't add address to database
+        }
+    }
+
+    private void addAddressToDb(final String urlWebService,
+                                final String address_complete,
+                                final String address_landmark,
+                                final String address_stateId,
+                                final String address_cityId,
+                                final String address_areaId,
+                                final String address_tag){
+        class AddAddressToDb extends AsyncTask<Void,Void,Void>{
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    URL url = new URL(urlWebService);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setDoOutput(true);
+                    con.setRequestMethod("POST");
+                    con.connect();
+                    DataOutputStream dos=new DataOutputStream(con.getOutputStream());
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+                        {
+                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSADD);
+                            put(auxiliary.PPK_ADDRCOMPLETE,address_complete);
+                            put(auxiliary.PPK_ADDRLANDMARK,address_landmark);
+                            put(auxiliary.PPK_STATEID,address_stateId);
+                            put(auxiliary.PPK_CITYID,address_cityId);
+                            put(auxiliary.PPK_AREAID,address_areaId);
+                            put(auxiliary.PPK_ADDRTAG,address_tag);
+                        }
+                    }));
+                    dos.flush();
+                    dos.close();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json);
+                    }
+                    //Log.i("sql (addAddress->fetchStateData)",sb.toString().trim());
+                } catch (MalformedURLException mue){
+                    Log.i("exception","MalformedURLException occurred in addAddressToDb (addAddress.java)");
+                    mue.printStackTrace();
+                } catch (IOException io){
+                    Log.i("exception","IOException occurred in addAddressToDb (addAddress.java)");
+                    io.printStackTrace();
+                } catch (Exception e){
+                    Log.i("exception","Exception occurred in addAddressToDb (addAddress.java)");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
+        AddAddressToDb addAddressToDb=new AddAddressToDb();
+        try {
+            addAddressToDb.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean validateInput(){
         boolean validationStatus=true;
-        if(completeAddressET.getText().length()==0){
+        StringBuilder error_message=new StringBuilder();
+        if(completeAddressET.getText().toString().length()==0){
+            error_message.append("Address cannot be empty. ");
+            return false;
+        } else if(completeAddressET.getText().toString().length()>auxiliary.COMPLETEADDRESS_MAXLENGTH){
+            error_message.append("Address length exceeded. ");
+            return false;
+        }
+        if(addressLandmarkET.getText().toString().length()>auxiliary.LANDMARK_MAXLENGTH){
+            error_message.append("Landmark length exceeded. ");
             return false;
         }
         if(stateSpinner.getSelectedItemPosition()==0){
+            error_message.append("Select a state. ");
             return false;
         }
         if(citySpinner.getSelectedItemPosition()==0){
+            error_message.append("Select a city. ");
             return false;
         }
         if(areaSpinner.getSelectedItemPosition()==0){
+            error_message.append("Select an area. ");
             return false;
         }
-        return !validationStatus;
+        if(selectedAddressTag==null){
+            error_message.append("Select or add a tag");
+            return false;
+        } else if(selectedAddressTag==addressTag.CUSTOM_TAG && addOtherTagET.getText().toString().length()>auxiliary.CUSTOMTAG_MAXLENGTH){
+            error_message.append("Length of tag cannot exceed ").append(Integer.toString(auxiliary.CUSTOMTAG_MAXLENGTH)).append(" ");
+            return false;
+        }
+        Toast.makeText(mContext,error_message.toString().trim(),Toast.LENGTH_LONG).show();
+        return validationStatus;
     }
 
     private void initializeGeographyData(boolean initialize_state_data,
@@ -214,6 +344,74 @@ public class addAddress extends AppCompatActivity {
             areaData=new ArrayList<HashMap<String, String>>();
             areaData.add(new HashMap<String, String>(){{put("0",auxiliary.SPINNER_UNSELECTED_AREA);}});
         }
+    }
+
+    private void initializeAddressTagButtons(){
+        homeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.default_border_store_page));
+        homeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorBlack));
+        officeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.default_border_store_page));
+        officeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorBlack));
+    }
+
+    private void addListenersToTagViews(){
+        homeTagLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                homeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.border_store_page));
+                homeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorWhite));
+                officeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.default_border_store_page));
+                officeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorBlack));
+
+                if(addOtherTagET.hasFocus()){
+                    addOtherTagET.setText("");
+                    addOtherTagET.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(addOtherTagET.getWindowToken(),0);
+                    //onBackPressed();
+                }
+
+                selectedAddressTag=addressTag.HOME;
+            }
+        });
+        officeTagLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                officeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.border_store_page));
+                officeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorWhite));
+                homeTagLL.setBackground(ContextCompat.getDrawable(mContext,R.drawable.default_border_store_page));
+                homeTagTextTV.setTextColor(ContextCompat.getColor(mContext,R.color.colorBlack));
+
+                if(addOtherTagET.hasFocus()){
+                    addOtherTagET.setText("");
+                    addOtherTagET.clearFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(addOtherTagET.getWindowToken(),0);
+                    //onBackPressed();
+                }
+
+                selectedAddressTag=addressTag.OFFICE;
+            }
+        });
+
+        addOtherTagET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()==0){
+                    selectedAddressTag=null;
+                } else if(charSequence.length()>0){
+                    initializeAddressTagButtons();
+                    selectedAddressTag=addressTag.CUSTOM_TAG;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     @Override
