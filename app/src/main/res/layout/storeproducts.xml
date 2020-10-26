@@ -34,6 +34,7 @@
             android:textColor="@color/colorProductBrand"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textAllCaps="true"
             android:textStyle="bold" />
@@ -43,18 +44,21 @@
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
 
         <TextView
             android:id="@+id/storeProductSizeUnitContainerTV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
 
         <TextView
             android:id="@+id/storeProductMrpTV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
 
         <TextView
@@ -62,6 +66,7 @@
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -77,24 +82,31 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <Button
             android:id="@+id/addOneMoreProdB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
             android:layout_gravity="top"
+            android:background="@drawable/btn_increase"
+            android:textColor="@color/blackColor"
             android:visibility="gone"
             android:textStyle="bold"
             android:text="+" />
         <Button
             android:id="@+id/addProdB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:textAllCaps="false"
+            android:textColor="@color/blackColor"
+            android:background="@drawable/btn_search_border"
+            android:drawableRight="@drawable/add_btn"
+            android:drawablePadding="2dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:visibility="visible"
-            android:text="ADD" />
+            android:text="Add" />
         <TextView
             android:id="@+id/thisProdCountTV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:paddingVertical="8dp"
             android:layout_weight="0.3"
             android:visibility="gone"
             android:layout_gravity="center"
@@ -102,9 +114,10 @@
             android:text="1"/>
         <Button
             android:id="@+id/removeOneProdB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:background="@drawable/btn_decrease"
+            android:textColor="@color/blackColor"
             android:visibility="gone"
             android:textStyle="bold"
             android:text="-"/>

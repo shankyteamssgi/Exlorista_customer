@@ -34,6 +34,7 @@
             android:textColor="@color/colorProductBrand"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textAllCaps="true"
             android:textStyle="bold" />
@@ -42,12 +43,14 @@
             android:id="@+id/cartProductNameTV"
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_height="0dp"
             android:layout_weight="0.2" />
 
         <TextView
             android:id="@+id/cartProductSizeUnitContainerTV"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_height="0dp"
             android:layout_weight="0.2" />
 
@@ -55,6 +58,7 @@
             android:id="@+id/cartProductMrpTV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
 
         <TextView
@@ -62,6 +66,7 @@
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -77,9 +82,9 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <Button
             android:id="@+id/cartAddOneMoreProdB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.28"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:background="@drawable/btn_increase"
             android:layout_gravity="top"
             android:textStyle="bold"
             android:text="+" />
@@ -88,14 +93,16 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="0.28"
+            android:fontFamily="@font/comfortaa_bold"
+            android:paddingVertical="8dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="1"/>
         <Button
             android:id="@+id/cartRemoveOneProdB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.28"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:background="@drawable/btn_decrease"
             android:textStyle="bold"
             android:text="-"/>
         <TextView

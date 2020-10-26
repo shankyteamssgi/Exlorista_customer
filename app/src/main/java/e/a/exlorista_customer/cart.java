@@ -39,9 +39,9 @@ public class cart extends AppCompatActivity implements CartProductsAdapter.CartP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        setTitle("Cart");
+       /* setTitle("Cart");
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         clearCartB=findViewById(R.id.clearCartB);
         cartSummary_CartNSV=findViewById(R.id.cartSummary_CartNSV);

@@ -88,10 +88,10 @@ public class StoreProductCategoriesAdapter extends
         // Color change logic
         if(mPositionCurrentlySelected==holder.getAdapterPosition()){
             // this is the selected item : change to desired color
-            holder.mStoreProductCategoryB.setTextColor(ContextCompat.getColor(this.mContext,R.color.colorActionBarBackground));
+            holder.mStoreProductCategoryB.setTextColor(ContextCompat.getColor(this.mContext,R.color.whiteColor));
         } else{
             // this item is not selected : reset to default color
-            holder.mStoreProductCategoryB.setTextColor(ContextCompat.getColor(this.mContext,R.color.colorBodyText));
+            holder.mStoreProductCategoryB.setTextColor(ContextCompat.getColor(this.mContext,R.color.whiteColor));
         }
     }
 

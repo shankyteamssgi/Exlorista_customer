@@ -38,6 +38,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:textSize="16sp"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
                 android:text="order placed" />
             <ImageView
@@ -52,7 +54,8 @@
             android:id="@+id/orderPlacedDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBodyText"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Order has been placed"
             android:visibility="gone"/>
     </LinearLayout>
@@ -75,6 +78,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:textSize="16sp"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
                 android:text="order accepted" />
             <ImageView
@@ -89,7 +94,8 @@
             android:id="@+id/orderAcceptedDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBodyText"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Store has accepted your order"
             android:visibility="gone"/>
     </LinearLayout>
@@ -112,6 +118,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:textSize="16sp"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
                 android:text="checking availability" />
             <ImageView
@@ -142,6 +150,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:textSize="16sp"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
                 android:text="order packaged" />
             <ImageView
@@ -156,7 +166,8 @@
             android:id="@+id/orderPackagedDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBodyText"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Order has been packaged"
             android:visibility="gone"/>
     </LinearLayout>
@@ -179,6 +190,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:textSize="16sp"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
                 android:text="order dispatched" />
             <ImageView
@@ -193,7 +206,8 @@
             android:id="@+id/orderDispatchedDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBodyText"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Order has been dispatched"
             android:visibility="gone"/>
     </LinearLayout>
@@ -215,6 +229,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
+                android:textColor="@color/blackColor"
+                android:fontFamily="@font/comfortaa_bold"
                 android:textSize="16sp"
                 android:textAllCaps="true"
                 android:text="order arrived" />
@@ -230,7 +246,8 @@
             android:id="@+id/orderArrivedDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBodyText"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Your order has arrived"
             android:visibility="gone"/>
     </LinearLayout>

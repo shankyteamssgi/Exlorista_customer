@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView.LayoutManager storeDetailsRVLayoutManager;
     private int currentPage;
     private Timer timer;
+    private ActionBarDrawerToggle toggle;
 
     private auxiliary aux;
     private Context mContext;
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("EXPLORISTA");
         mContext=this;
         navigationView=findViewById(R.id.nav_view);
         attachOnClickListenersToUserAccountManagementViews();
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         //navigationView=findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        /*navigationView.setNavigationItemSelectedListener(this);
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer=findViewById(R.id.drawer_layout);
@@ -128,8 +130,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //Navigation Drawer
+        setUpToolbar();
+        //Navigation Drawer Close
+
+
     }
+
+    //Navigtion Drawer
+
+    private void setUpToolbar() {
+        drawer = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Drawable d = ResourcesCompat.getDrawable(getResources(), R.drawable.menu, null);
+        toolbar.setNavigationIcon(d);
+
+    }
+    //Navigation Drawer Close
 
     @Override
     protected void onResume() {
@@ -142,7 +168,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+        Log.i("DEBUG-MainActivity","inside onNavigationItemSelected");
+
         if(item.getItemId()==IDHamburgerOption.get("cart")){
+            Log.i("DEBUG-MainActivity","cart, click detected");
             startActivity(new Intent(this,cart.class));
             drawer.closeDrawer(GravityCompat.START);
         }
