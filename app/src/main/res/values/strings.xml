@@ -9,4 +9,5 @@
     <string name="phone_already_exists">Phone no already exists. Try signing up with a different phone no.</string>
     <string name="phone_does_not_exist">Phone no does not exist.</string>
     <string name="failed_user_addition_to_db">Failed adding user to database.</string>
+    <string name="please_wait">Please wait....</string>
 </resources>

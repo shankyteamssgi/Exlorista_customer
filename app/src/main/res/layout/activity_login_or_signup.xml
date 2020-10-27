@@ -10,12 +10,14 @@
         android:id="@+id/signInGoogleNewwSIB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
     <com.facebook.login.widget.LoginButton
         android:id="@+id/signInFacebookNewwLB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:id="@+id/loginOrSignupHeadingLL"
@@ -40,7 +42,7 @@
             android:background="@color/colorActionBarBackground"
             android:textColor="@color/colorActionBarTitleText"
             android:textStyle="normal"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:text="LOG IN"/>
         <TextView
             android:layout_width="0dp"
@@ -77,8 +79,9 @@
             android:layout_width="0dp"
             android:layout_weight="0.1"
             android:layout_height="match_parent"
-            android:src="@drawable/google_icon_round"
-            android:paddingLeft="5dp" />
+            app:srcCompat="@drawable/google_icon_round"
+            android:paddingLeft="5dp"
+            />
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.9"
@@ -105,8 +108,9 @@
             android:layout_width="0dp"
             android:layout_weight="0.1"
             android:layout_height="match_parent"
-            android:src="@drawable/facebook_icon_round"
-            android:paddingLeft="5dp"/>
+            app:srcCompat="@drawable/facebook_icon_round"
+            android:paddingLeft="5dp"
+           />
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.9"
