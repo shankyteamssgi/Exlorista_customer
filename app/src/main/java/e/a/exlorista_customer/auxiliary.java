@@ -123,6 +123,8 @@ class auxiliary{
     static String PPV_REQUESTTYPE_ADDRESSEDIT="53";
 
     // addAddress.java
+    static String PPK_STATENAME="stateName";
+    static String PPK_CITYNAME="cityName";
     static String PPK_STATEID="stateId";
     static String PPK_CITYID="cityId";
     static String PPK_AREAID="areaId";
@@ -133,6 +135,7 @@ class auxiliary{
     static String PPV_REQUESTTYPE_ADDRESSCITYDATAFETCH="55";
     static String PPV_REQUESTTYPE_ADDRESSSTATEDATAFETCH="56";
     static String PPV_REQUESTTYPE_ADDRESSADD="57";
+    static String PPV_REQUESTTYPE_STATEANDCITYIDFETCH="58";
     static String SPINNER_UNSELECTED_STATE="Select state";
     static String SPINNER_UNSELECTED_CITY="Select city";
     static String SPINNER_UNSELECTED_AREA="Select area";

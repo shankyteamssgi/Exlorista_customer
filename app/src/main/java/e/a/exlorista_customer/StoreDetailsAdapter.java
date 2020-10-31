@@ -1,10 +1,13 @@
 package e.a.exlorista_customer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +36,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import e.a.exlorista_customer.ProgressDialog.progressDialog;
+
 /**
  * Created by a on 1/13/2020.
  */
@@ -47,8 +52,11 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
     private ArrayList<String> storeImgPath;
     private ArrayList<Bitmap> storeImg;
     private auxiliary aux;
+    progressDialog progressDialog;
 
-    static class StoreDetailViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class StoreDetailViewHolder extends RecyclerView.ViewHolder {
 
         TextView mStoreNameTV;
         TextView mStoreAddressTV;
@@ -63,6 +71,8 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
             mStoreTimingTV=itemView.findViewById(R.id.storeTimingTV);
             mStoreImgIV=itemView.findViewById(R.id.storeImgIV);
             mStoreDetailCL=itemView.findViewById(R.id.storeDetailsCL);
+
+
         }
     }
 
@@ -76,6 +86,8 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         this.storeImg=new ArrayList<>();
         this.aux=new auxiliary();
         this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
+        //initilize the dialog
+        progressDialog = new progressDialog((Activity) mContext);
     }
 
     @Override
@@ -96,13 +108,26 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         holder.mStoreDetailCL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StoreDetailsAdapter.this.storeClicked(storeId.get(holder.getAdapterPosition()),
-                        storeName.get(holder.getAdapterPosition()),
-                        storeAddress.get(holder.getAdapterPosition()),
-                        storeTiming.get(holder.getAdapterPosition()),
-                        storeImgPath.get(holder.getAdapterPosition()));
+                progressDialog.startLoading();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        StoreDetailsAdapter.this.storeClicked(storeId.get(holder.getAdapterPosition()),
+                                storeName.get(holder.getAdapterPosition()),
+                                storeAddress.get(holder.getAdapterPosition()),
+                                storeTiming.get(holder.getAdapterPosition()),
+                                storeImgPath.get(holder.getAdapterPosition()));
+
+                    }
+                }, 5000);
+
+
+
+
             }
         });
+
     }
 
     @Override
@@ -163,6 +188,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                                     +obj.getString("store_closeTime"));*/
                             //Log.i("CONTROL", "store details set");
                         }
+
                     } else {
                         //Log.i("CONTROL","PPK failed or not set");
                     }
@@ -199,13 +225,24 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                               String store_address,
                               String[] store_timing,
                               String store_imgPath){
+
         Intent intent=new Intent(this.mContext,store.class);
         intent.putExtra(auxiliary.STORE_ID,store_id);
         intent.putExtra(auxiliary.STORE_NAME,store_name);
         intent.putExtra(auxiliary.STORE_ADDRESS,store_address);
         intent.putExtra(auxiliary.STORE_TIMING,store_timing);
         intent.putExtra(auxiliary.STORE_IMGPATH,store_imgPath);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+
         this.mContext.startActivity(intent);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.stopLoading();
+            }
+        },5000);
+
     }
 
     private String[] getStoreTimingStringArray(JSONObject obj){

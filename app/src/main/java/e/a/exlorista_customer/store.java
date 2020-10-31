@@ -33,10 +33,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import e.a.exlorista_customer.ProgressDialog.progressDialog;
+
 public class store extends AppCompatActivity
         implements StoreProductCategoriesAdapter.storeProductCategoriesAdapterCallback
         ,StoreProductsAdapter.StoreProductsSelectedAdapterCallback{
 
+    progressDialog progressDialog;
     Bundle extras;
     static String storeId, storeName, storeAddress; // this is needed to be displayed in cart as well
     String[] storeTiming;
@@ -75,6 +78,9 @@ public class store extends AppCompatActivity
         //getSupportActionBar().hide();*/
 
         //Log.i("CONTROL","inside store.java");
+        //initilize the dialog
+        progressDialog = new progressDialog(this);
+
 
         storeTimingVisible=false;
         storeNameStorePageTV=findViewById(R.id.storeNameStorePageTV);
@@ -97,6 +103,7 @@ public class store extends AppCompatActivity
 
         extras=getIntent().getExtras();
         try{
+
             storeId=extras.getString(auxiliary.STORE_ID);
             storeName=extras.getString(auxiliary.STORE_NAME);
             storeAddress=extras.getString(auxiliary.STORE_ADDRESS);
@@ -275,4 +282,6 @@ public class store extends AppCompatActivity
             cartSummary_StoreNSV.setVisibility(View.GONE);
         }
     }
+
+
 }

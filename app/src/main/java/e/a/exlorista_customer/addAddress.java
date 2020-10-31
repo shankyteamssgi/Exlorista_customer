@@ -1,8 +1,10 @@
 package e.a.exlorista_customer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -56,6 +58,7 @@ public class addAddress extends AppCompatActivity {
     private static final int REQUEST_CODE_LOCATION_PERMISSION=1;
     private static final int REQUEST_CHECK_SETTINGS=2;
 
+
     private EditText completeAddressET,addressLandmarkET,addOtherTagET;
     private Spinner stateSpinner,citySpinner,areaSpinner;
     private Button saveAddressB;
@@ -69,6 +72,9 @@ public class addAddress extends AppCompatActivity {
     LocationRequest locationRequest;
     private Context mContext;
 
+    SharedPreferences sharedPreferences;
+    String currantState,currentCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +83,12 @@ public class addAddress extends AppCompatActivity {
         //setTitle("Add address");
         //getSupportActionBar().setHomeButtonEnabled(true);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        currantState = getIntent().getStringExtra("current_State");
+        currentCity = getIntent().getStringExtra("current_City");
+
+
 
         mContext=this;
 
@@ -94,6 +106,7 @@ public class addAddress extends AppCompatActivity {
         cityChoiceLL=findViewById(R.id.cityChoiceLL);
         stateChoiceLL=findViewById(R.id.stateChoiceLL);
         selectedAddressTag=null;
+
 
         initializeGeographyData(true,true,true);
         initializeAddressTagButtons();
@@ -137,65 +150,83 @@ public class addAddress extends AppCompatActivity {
         - If input validation is successful, add address to database.
          */
 
-        stateChoiceLL.setVisibility(View.VISIBLE);
-        cityChoiceLL.setVisibility(View.VISIBLE);
-        fetchStateData(auxiliary.SERVER_URL+"/addressBookManager.php");
-        stateSpinner.setAdapter(new ArrayAdapter<String>(mContext
-                ,android.R.layout.simple_spinner_dropdown_item
-                ,auxiliary.arrayListOfHMtoArrayListOfHMVals(stateData)));
-        citySpinner.setAdapter(new ArrayAdapter<String>(mContext
-                ,android.R.layout.simple_spinner_dropdown_item
-                ,new String[]{auxiliary.SPINNER_UNSELECTED_CITY}));
-        areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
-                ,android.R.layout.simple_spinner_dropdown_item
-                ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
-        stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if(position!=0){
-                    fetchCityData(auxiliary.SERVER_URL+"/addressBookManager.php"
-                            ,stateData.get(position).keySet().iterator().next());
-                    citySpinner.setAdapter(new ArrayAdapter<String>(mContext
-                            ,android.R.layout.simple_spinner_dropdown_item
-                            ,auxiliary.arrayListOfHMtoArrayListOfHMVals(cityData)));
-                } else{
-                    initializeGeographyData(false,true,true);
-                    citySpinner.setAdapter(new ArrayAdapter<String>(mContext
-                            ,android.R.layout.simple_spinner_dropdown_item
-                            ,new String[]{auxiliary.SPINNER_UNSELECTED_CITY}));
-                    areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
-                            ,android.R.layout.simple_spinner_dropdown_item
-                            ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
+        if(currantState==null&&currentCity==null){
+
+            stateChoiceLL.setVisibility(View.VISIBLE);
+            cityChoiceLL.setVisibility(View.VISIBLE);
+            //change hear
+            // fatchStateID_and_CityID(auxiliary.SERVER_URL+"/addressBookManager.php",currantState,currentCity);
+            fetchStateData(auxiliary.SERVER_URL+"/addressBookManager.php");
+            stateSpinner.setAdapter(new ArrayAdapter<String>(mContext
+                    ,android.R.layout.simple_spinner_dropdown_item
+                    ,auxiliary.arrayListOfHMtoArrayListOfHMVals(stateData)));
+            citySpinner.setAdapter(new ArrayAdapter<String>(mContext
+                    ,android.R.layout.simple_spinner_dropdown_item
+                    ,new String[]{auxiliary.SPINNER_UNSELECTED_CITY}));
+            areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
+                    ,android.R.layout.simple_spinner_dropdown_item
+                    ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
+            stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    if(position!=0){
+                        fetchCityData(auxiliary.SERVER_URL+"/addressBookManager.php"
+                                ,stateData.get(position).keySet().iterator().next());
+                        citySpinner.setAdapter(new ArrayAdapter<String>(mContext
+                                ,android.R.layout.simple_spinner_dropdown_item
+                                ,auxiliary.arrayListOfHMtoArrayListOfHMVals(cityData)));
+                    } else{
+                        initializeGeographyData(false,true,true);
+                        citySpinner.setAdapter(new ArrayAdapter<String>(mContext
+                                ,android.R.layout.simple_spinner_dropdown_item
+                                ,new String[]{auxiliary.SPINNER_UNSELECTED_CITY}));
+                        areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
+                                ,android.R.layout.simple_spinner_dropdown_item
+                                ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if(position!=0){
-                    fetchAreaData(auxiliary.SERVER_URL+"/addressBookManager.php"
-                            ,stateData.get(position).keySet().iterator().next()
-                            ,cityData.get(position).keySet().iterator().next());
-                    areaSpinner.setAdapter(new ArrayAdapter<>(mContext
-                            ,android.R.layout.simple_spinner_dropdown_item
-                            ,auxiliary.arrayListOfHMtoArrayListOfHMVals(areaData)));
-                } else{
-                    initializeGeographyData(false,false,true);
-                    areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
-                            ,android.R.layout.simple_spinner_dropdown_item
-                            ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
                 }
-            }
+            });
+            citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    if(position!=0){
+                        fetchAreaData(auxiliary.SERVER_URL+"/addressBookManager.php"
+                                ,stateData.get(position).keySet().iterator().next()
+                                ,cityData.get(position).keySet().iterator().next(),null,null);
+                        areaSpinner.setAdapter(new ArrayAdapter<>(mContext
+                                ,android.R.layout.simple_spinner_dropdown_item
+                                ,auxiliary.arrayListOfHMtoArrayListOfHMVals(areaData)));
+                    } else{
+                        initializeGeographyData(false,false,true);
+                        areaSpinner.setAdapter(new ArrayAdapter<String>(mContext
+                                ,android.R.layout.simple_spinner_dropdown_item
+                                ,new String[]{auxiliary.SPINNER_UNSELECTED_AREA}));
+                    }
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
+        }else {
+            stateChoiceLL.setVisibility(View.GONE);
+            cityChoiceLL.setVisibility(View.GONE);
+
+            fetchAreaData(auxiliary.SERVER_URL+"/addressBookManager.php"
+                    ,null
+                    ,null,currantState,currentCity);
+            areaSpinner.setAdapter(new ArrayAdapter<>(mContext
+                    ,android.R.layout.simple_spinner_dropdown_item
+                    ,auxiliary.arrayListOfHMtoArrayListOfHMVals(areaData)));
+        }
+
+
+
     }
 
     private void addAddressByValidationToDb(String urlWebService){
@@ -329,7 +360,7 @@ public class addAddress extends AppCompatActivity {
         return validationStatus;
     }
 
-    private void initializeGeographyData(boolean initialize_state_data,
+    private void  initializeGeographyData(boolean initialize_state_data,
                                          boolean initialize_city_data,
                                          boolean initialize_area_data){
         if(initialize_state_data){
@@ -487,6 +518,7 @@ public class addAddress extends AppCompatActivity {
     private void fetchCityData(final String urlWebService, final String state_id){
         // Fetch list of cities based on state id.
         class FetchCityData extends AsyncTask<Void,Void,Void>{
+            @SuppressLint("LongLogTag")
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
@@ -549,9 +581,14 @@ public class addAddress extends AppCompatActivity {
         }
     }
 
-    private void fetchAreaData(final String urlWebService, final String state_id, final String city_id){
+    private void fetchAreaData(final String urlWebService,
+                               final String state_id,
+                               final String city_id,
+                               final String state_name,
+                               final String city_name){
         // Fetches list of areas based on ids of state and city
         class FetchAreaData extends AsyncTask<Void,Void,Void>{
+            @SuppressLint("LongLogTag")
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
@@ -561,14 +598,31 @@ public class addAddress extends AppCompatActivity {
                     con.setRequestMethod("POST");
                     con.connect();
                     DataOutputStream dos=new DataOutputStream(con.getOutputStream());
-                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
-                        {
-                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
-                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
-                            put(auxiliary.PPK_STATEID,state_id);
-                            put(auxiliary.PPK_CITYID,city_id);
-                        }
-                    }));
+//                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+//                        {
+//                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+//                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
+//                        }
+ //                   }));
+                    if(state_name==null && city_name==null){
+                        dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+                            {
+                                put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+                                put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
+                                put(auxiliary.PPK_STATEID,state_id);
+                                put(auxiliary.PPK_CITYID,city_id);
+                            }
+                        }));
+                    } else if(state_id==null && city_id==null){
+                        dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+                            {
+                                put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+                                put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
+                                put(auxiliary.PPK_STATENAME,state_name);
+                                put(auxiliary.PPK_CITYNAME,city_name);
+                            }
+                        }));
+                    }
                     dos.flush();
                     dos.close();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -588,6 +642,8 @@ public class addAddress extends AppCompatActivity {
                                     put(jsonObject.getString("area_id"),jsonObject.getString("area_name"));
                                 }
                             });
+                            // can't find state and city inside DB
+                            Log.i("sql (addAddress->fetchAreaId from DB -> null)",sb.toString().trim());
                         }
                     } else{
                         Log.i("PPK","Check fail in addAddress.java in fetchAreaData");
@@ -614,4 +670,165 @@ public class addAddress extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+//
+//    private void fatchStateID_and_CityID(final String urlWebService,final String State_Name, final String City_Name){
+//        // fetch state id and city id
+//
+//        class FetchStateCityID extends AsyncTask<Void,Void,Void>{
+//
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//                try {
+//                    URL url = new URL(urlWebService);
+//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//                    con.setDoOutput(true);
+//                    con.setRequestMethod("POST");
+//                    con.connect();
+//                    DataOutputStream dos=new DataOutputStream(con.getOutputStream());
+//                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+//                        {
+//                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+//                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
+//                            put(auxiliary.PPK_STATENAME,State_Name);
+//                            put(auxiliary.PPK_CITYNAME,City_Name);
+//                        }
+//                    }));
+//                    dos.flush();
+//                    dos.close();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//                    StringBuilder sb = new StringBuilder();
+//                    String json;
+//                    while ((json = bufferedReader.readLine()) != null) {
+//                        sb.append(json);
+//                    }
+//                    //Log.i("sql (addAddress->fetchStateData)",sb.toString().trim());
+//                    if(!sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_FAIL) &&
+//                            !sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_NOT_SET)){
+//                        JSONArray jsonArray=new JSONArray(sb.toString().trim());
+//                        for(int i=0;i<jsonArray.length();i++){
+//                            final JSONObject jsonObject=jsonArray.getJSONObject(i);
+////                            stateData.add(new HashMap<String, String>(){
+////                                {
+////                                    put(jsonObject.getString("state_id"),jsonObject.getString("state_name"));
+////
+////                                }
+////                            });
+//
+////                            cityData.add(new HashMap<String, String>(){
+////                                {
+////
+////                                    put(jsonObject.getString("city_id"),jsonObject.getString("city_name"));
+////                                }
+////                            });
+//                            String sID = jsonObject.getString("state_id");
+//                            String cID = jsonObject.getString("city_id");
+//
+//                        }
+//
+//                    } else{
+//                        Log.i("PPK","Check fail in addAddress.java in fetchStateData");
+//                    }
+//                } catch (MalformedURLException mue){
+//                    Log.i("exception","MalformedURLException occurred in fetchAreas (addAddress.java)");
+//                    mue.printStackTrace();
+//                } catch (IOException io){
+//                    Log.i("exception","IOException occurred in fetchAreas (addAddress.java)");
+//                    io.printStackTrace();
+//                } catch (Exception e){
+//                    Log.i("exception","Exception occurred in fetchAreas (addAddress.java)");
+//                    e.printStackTrace();
+//                }
+//
+//                return null;
+//            }
+//        }
+//        FetchStateCityID stateCityID = new FetchStateCityID();
+//        try {
+//            stateCityID.execute().get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    private void fatchArea_With_Location(final String urlWebService,final String State_Id, final String City_Id){
+//        // fetch state id and city id
+//
+//        class FetchAreaWithLocation extends AsyncTask<Void,Void,Void>{
+//
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//                try {
+//                    URL url = new URL(urlWebService);
+//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//                    con.setDoOutput(true);
+//                    con.setRequestMethod("POST");
+//                    con.connect();
+//                    DataOutputStream dos=new DataOutputStream(con.getOutputStream());
+//                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+//                        {
+//                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
+//                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_ADDRESSAREADATAFETCH);
+//                            put(auxiliary.PPK_STATEID,State_Id);
+//                            put(auxiliary.PPK_CITYID,City_Id);
+//                        }
+//                    }));
+//                    dos.flush();
+//                    dos.close();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//                    StringBuilder sb = new StringBuilder();
+//                    String json;
+//                    while ((json = bufferedReader.readLine()) != null) {
+//                        sb.append(json);
+//                    }
+//                    //Log.i("sql (addAddress->fetchStateData)",sb.toString().trim());
+//                    if(!sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_FAIL) &&
+//                            !sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_NOT_SET)){
+//                        JSONArray jsonArray=new JSONArray(sb.toString().trim());
+//                        for(int i=0;i<jsonArray.length();i++){
+//                            final JSONObject jsonObject=jsonArray.getJSONObject(i);
+//
+//
+//                           areaData.add(new HashMap<String, String>(){
+//                                {
+//
+//                                    put(jsonObject.getString("area_id"),jsonObject.getString("area_name"));
+//                                }
+//                            });
+//                            areaSpinner.setAdapter(new ArrayAdapter<>(mContext
+//                                    ,android.R.layout.simple_spinner_dropdown_item
+//                                    ,auxiliary.arrayListOfHMtoArrayListOfHMVals(areaData)));
+//                        }
+//                    } else{
+//                        Log.i("PPK","Check fail in addAddress.java in fetchStateData");
+//                    }
+//                } catch (MalformedURLException mue){
+//                    Log.i("exception","MalformedURLException occurred in fetchAreas (addAddress.java)");
+//                    mue.printStackTrace();
+//                } catch (IOException io){
+//                    Log.i("exception","IOException occurred in fetchAreas (addAddress.java)");
+//                    io.printStackTrace();
+//                } catch (Exception e){
+//                    Log.i("exception","Exception occurred in fetchAreas (addAddress.java)");
+//                    e.printStackTrace();
+//                }
+//
+//                return null;
+//            }
+//        }
+//        FetchAreaWithLocation fetchAreaWithLocation = new FetchAreaWithLocation();
+//        try {
+//            fetchAreaWithLocation.execute().get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
 }

@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import e.a.exlorista_customer.ProgressDialog.progressDialog;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawer;
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private auxiliary aux;
     private Context mContext;
 
+    ImageView imageView3;
+    progressDialog progressDialog;
+
     private final int SECONDS_UNTIL_SERVER_UNAVAILABILITY=2;
     private final int SLIDER_DELAY=0;
     private final int SLIDER_PERIOD=10;
@@ -74,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext=this;
+
+        imageView3 = (ImageView) findViewById(R.id.imageView3);
+        progressDialog = new progressDialog(this);
+        progressDialog.startLoading();
+
         navigationView=findViewById(R.id.nav_view);
         attachOnClickListenersToUserAccountManagementViews();
         currentPage=0;
@@ -95,9 +105,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     int serverAvailability=aux.getServerAvailability();
                     if(serverAvailability==1){
                         // server available
-                        getHamburgerJSON(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php");
-                        loadImageSlider(SLIDER_PERIOD,SLIDER_DELAY);
-                        loadStoreDetails();
+
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                getHamburgerJSON(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php");
+                                loadImageSlider(SLIDER_PERIOD,SLIDER_DELAY);
+                                loadStoreDetails();
+                                progressDialog.stopLoading();
+                            }
+                        },8000);
+
+                        //stop dialog
+
+                        //go to cartActivity
+                        imageView3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getApplicationContext(),cart.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                            }
+                        });
+
                         //fetchSetImage(auxiliary.SERVER_URL+"/images/ads/ad1.jpg");
                         //getGalleryImagesPathJSON(auxiliary.SERVER_URL+"/fetchGalleryImages.php");
                         break;
@@ -160,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         Log.i("Inside onResume","Code executed");
+
         manageUserDetailInNavbar();
         handleBottomSheetBehavior();
         super.onResume();
@@ -211,6 +246,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void getHamburgerJSON(final String urlWebService) {
 
         class GetHamburgerJSON extends AsyncTask<Void, Void, String> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+            }
 
             @Override
             protected void onPostExecute(String s) {
@@ -409,6 +449,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         storeDetailsRVAdapter=new StoreDetailsAdapter(this);
         storeDetailsRV.setLayoutManager(storeDetailsRVLayoutManager);
         storeDetailsRV.setAdapter(storeDetailsRVAdapter);
+        progressDialog.stopLoading();
     }
 
     private void addUserDetailToNavbar(String email,String display_name,String phone){

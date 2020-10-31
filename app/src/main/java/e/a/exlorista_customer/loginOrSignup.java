@@ -112,6 +112,7 @@ public class loginOrSignup extends AppCompatActivity {
         signInFacebookNewwLB=findViewById(R.id.signInFacebookNewwLB);
 
         selectedOption=auxiliaryuseraccountmanager.options.LOGIN;
+
         loginTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
