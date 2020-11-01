@@ -1,6 +1,7 @@
 package e.a.exlorista_customer;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,13 +34,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import e.a.exlorista_customer.ProgressDialog.progressDialog;
-
 public class store extends AppCompatActivity
         implements StoreProductCategoriesAdapter.storeProductCategoriesAdapterCallback
         ,StoreProductsAdapter.StoreProductsSelectedAdapterCallback{
 
-    progressDialog progressDialog;
+    ProgressDialog progressDialog;
     Bundle extras;
     static String storeId, storeName, storeAddress; // this is needed to be displayed in cart as well
     String[] storeTiming;
@@ -79,7 +78,7 @@ public class store extends AppCompatActivity
 
         //Log.i("CONTROL","inside store.java");
         //initilize the dialog
-        progressDialog = new progressDialog(this);
+        progressDialog = new ProgressDialog(this);
 
 
         storeTimingVisible=false;

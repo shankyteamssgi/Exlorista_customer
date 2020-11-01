@@ -10,6 +10,7 @@
     tools:context="e.a.exlorista_customer.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/internalLayoutRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -44,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/cartIV"
                 android:layout_width="75px"
                 android:layout_height="75px"
                 android:layout_marginTop="8dp"

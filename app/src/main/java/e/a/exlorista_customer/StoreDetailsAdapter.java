@@ -1,6 +1,7 @@
 package e.a.exlorista_customer;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,8 +37,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import e.a.exlorista_customer.ProgressDialog.progressDialog;
-
 /**
  * Created by a on 1/13/2020.
  */
@@ -52,7 +51,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
     private ArrayList<String> storeImgPath;
     private ArrayList<Bitmap> storeImg;
     private auxiliary aux;
-    progressDialog progressDialog;
+    ProgressDialog progressDialog;
 
 
 
@@ -87,7 +86,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         this.aux=new auxiliary();
         this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
         //initilize the dialog
-        progressDialog = new progressDialog((Activity) mContext);
+        progressDialog = new ProgressDialog((Activity) mContext);
     }
 
     @Override
@@ -108,7 +107,8 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         holder.mStoreDetailCL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.startLoading();
+                progressDialog.show();
+                progressDialog.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -239,7 +239,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                progressDialog.stopLoading();
+                progressDialog.hide();
             }
         },5000);
 
