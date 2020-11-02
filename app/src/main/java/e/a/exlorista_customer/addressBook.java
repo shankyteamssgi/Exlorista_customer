@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -40,8 +41,13 @@ import com.google.android.gms.tasks.Task;
 import java.util.List;
 import java.util.Locale;
 
+import e.a.exlorista_customer.ProgressDialog.progressDialog;
+
 public class addressBook extends AppCompatActivity implements LocationListener {
 
+
+    private static final long MIN_TIME = 2000;
+    private static final float MIN_DISTANCE = 10;
 
     enum userPermissionResponse {LOCATION_NOT_ENABLED, PERMISSION_DENIED, PERMISSION_DENIED_WITH_NEVERASKAGAIN}
 
@@ -50,6 +56,8 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 2;
+    boolean gps_enabled = false;
+    boolean isNetworkOn = false;
     LocationRequest locationRequest;
 
     Button addNewAddressB;
@@ -64,6 +72,7 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     private Double latitude;
     private String current_State;
     private String current_City;
+    progressDialog progressDailog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +82,11 @@ public class addressBook extends AppCompatActivity implements LocationListener {
         /*setTitle("Address book");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
+        isNetworkOn = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        // initilize Dailog
+        progressDailog = new progressDialog(this);
 
 
         mContext = this;
@@ -87,10 +98,50 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
 
-                Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
-                addressBookToAddAddressIntent.putExtra("current_State",current_State);
-                addressBookToAddAddressIntent.putExtra("current_City",current_City);
-                startActivity(addressBookToAddAddressIntent);
+                if (!gps_enabled) {
+                    Log.d("Connection", "Connection Off");
+                    if (gpsEnabled(mContext)) {
+                        //Log.i("LOCATION","Gps is enabled");
+                        // Call below code only when location access is granted and lat, long is fetched
+                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            Log.i("LOCATION", "Permission already granted");
+
+
+
+                        } else {
+                            Log.i("LOCATION", "Permission not granted. Requesting permission.");
+                            ActivityCompat.requestPermissions(addressBook.this
+                                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
+                                    , REQUEST_CODE_LOCATION_PERMISSION);
+                        }
+                    } else {
+                        Log.i("LOCATION", "Gps is disabled.");
+                        setLocationSettings();
+                    }
+                }
+
+                getCurrentLocation();
+
+                if(gps_enabled){
+
+                    progressDailog.startLoading();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
+                            addressBookToAddAddressIntent.putExtra("current_State", current_State);
+                            addressBookToAddAddressIntent.putExtra("current_City", current_City);
+                            startActivity(addressBookToAddAddressIntent);
+                            progressDailog.stopLoading();
+                        }
+                    },3000);
+
+                }else{
+                    Log.i("GPS", "GPS Off");
+                }
 
 
             }
@@ -101,22 +152,30 @@ public class addressBook extends AppCompatActivity implements LocationListener {
         addressListRV.setLayoutManager(addressListRVLayoutManager);
         addressListRV.setAdapter(addressListRVAdapter);
         setLocationRequest();
+
+
+
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (gpsEnabled(mContext)) {
-            //Log.i("LOCATION","Gps is enabled");
-            // Call below code only when location access is granted and lat, long is fetched
+    private void getCurrentLocation() {
+
+
+        if (gps_enabled) {
+            Log.i("GPS", "GPS On");
+
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.i("LOCATION", "Permission already granted");
+               locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        onLocationChanged(location);
 
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                onLocationChanged(location);
-                findAddress();
-
+                    } else {
+                        Log.i("LOCATION", "Can't find Location");
+                    }
+                }
 
             } else {
                 Log.i("LOCATION", "Permission not granted. Requesting permission.");
@@ -124,11 +183,40 @@ public class addressBook extends AppCompatActivity implements LocationListener {
                         , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
                         , REQUEST_CODE_LOCATION_PERMISSION);
             }
-        } else {
-            Log.i("LOCATION", "Gps is disabled.");
-            setLocationSettings();
+
+
+        } else{
+
+            if(isNetworkOn){
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("LOCATION", "Permission already granted");
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            onLocationChanged(location);
+
+                        } else {
+                            Log.i("LOCATION", "Can't find Location");
+                        }
+                    }
+                } else {
+                    Log.i("LOCATION", "Permission not granted. Requesting permission.");
+                    ActivityCompat.requestPermissions(addressBook.this
+                            , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
+                            , REQUEST_CODE_LOCATION_PERMISSION);
+                }
+
+            }else{
+                Log.i("LOCATION", "Networkprovider is Off.");
+            }
+
+
         }
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -335,8 +423,8 @@ public class addressBook extends AppCompatActivity implements LocationListener {
         }
     }
 
-    static boolean gpsEnabled(Context context) {
-        boolean gps_enabled = false;
+    private boolean gpsEnabled(Context context) {
+
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         try {
             if (locationManager != null) {
@@ -354,9 +442,11 @@ public class addressBook extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(final Location location) {
-        if(location!=null){
+
+        if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+            findAddress();
         }
 
 
@@ -369,11 +459,8 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             List<Address> addresses;
             geocoder = new Geocoder(this, Locale.getDefault());
             addresses = geocoder.getFromLocation(latitude, longitude, LOCATION_REQUEST_CODE);
-             current_State = addresses.get(0).getAdminArea();
-             current_City = addresses.get(0).getLocality();
-
-
-
+            current_State = addresses.get(0).getAdminArea();
+            current_City = addresses.get(0).getLocality();
 
 
         } catch (Exception e) {
@@ -385,7 +472,6 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
 
-
     }
 
     @Override
@@ -395,6 +481,8 @@ public class addressBook extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
-
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
     }
 }
