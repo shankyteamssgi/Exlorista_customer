@@ -46,6 +46,9 @@ class auxiliary{
     //static String SERVER_URL="http://ec2-3-16-188-152.us-east-2.compute.amazonaws.com/app";
     static String SERVER_URL="http://3.16.188.152/app";
 
+    //ProgressDialog message
+    final static String PROGRESS_DIALOG_MESSAGE="Please wait";
+
     // StoreDetailsAdapter.java
     final static int MON_INT=0;
     final static int TUE_INT=1;

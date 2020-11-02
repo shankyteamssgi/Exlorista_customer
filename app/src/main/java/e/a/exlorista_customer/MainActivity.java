@@ -1,6 +1,7 @@
 package e.a.exlorista_customer;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -48,11 +50,10 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import e.a.exlorista_customer.ProgressDialog.progressDialog;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawer;
+    private RelativeLayout internalLayoutRL;
     private NavigationView navigationView;
     private ViewPager imgSliderVP;
     private ImageSliderAdapter imageSliderAdapter;
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private auxiliary aux;
     private Context mContext;
 
-    ImageView imageView3;
-    progressDialog progressDialog;
+    ImageView cartIV;
+    ProgressDialog progressDialog;
 
     private final int SECONDS_UNTIL_SERVER_UNAVAILABILITY=2;
     private final int SLIDER_DELAY=0;
@@ -80,10 +81,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         mContext=this;
 
-        imageView3 = (ImageView) findViewById(R.id.imageView3);
-        progressDialog = new progressDialog(this);
-        progressDialog.startLoading();
+        internalLayoutRL=findViewById(R.id.internalLayoutRL);
+        internalLayoutRL.setVisibility(View.INVISIBLE);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
+
+        drawer = findViewById(R.id.drawer_layout);
+
+        cartIV = (ImageView) findViewById(R.id.cartIV);
         navigationView=findViewById(R.id.nav_view);
         attachOnClickListenersToUserAccountManagementViews();
         currentPage=0;
@@ -115,14 +122,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 getHamburgerJSON(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php");
                                 loadImageSlider(SLIDER_PERIOD,SLIDER_DELAY);
                                 loadStoreDetails();
-                                progressDialog.stopLoading();
+                                progressDialog.hide();
+                                internalLayoutRL.setVisibility(View.VISIBLE);
                             }
                         },8000);
 
                         //stop dialog
 
                         //go to cartActivity
-                        imageView3.setOnClickListener(new View.OnClickListener() {
+                        cartIV.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Intent intent = new Intent(getApplicationContext(),cart.class);
@@ -170,14 +178,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Navigation Drawer
         setUpToolbar();
         //Navigation Drawer Close
-
-
     }
 
     //Navigtion Drawer
 
     private void setUpToolbar() {
-        drawer = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -449,7 +454,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         storeDetailsRVAdapter=new StoreDetailsAdapter(this);
         storeDetailsRV.setLayoutManager(storeDetailsRVLayoutManager);
         storeDetailsRV.setAdapter(storeDetailsRVAdapter);
-        progressDialog.stopLoading();
     }
 
     private void addUserDetailToNavbar(String email,String display_name,String phone){
