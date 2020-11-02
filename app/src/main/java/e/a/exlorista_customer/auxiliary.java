@@ -125,6 +125,12 @@ class auxiliary{
     static String PPV_REQUESTTYPE_ADDRESSDELETE="52";
     static String PPV_REQUESTTYPE_ADDRESSEDIT="53";
 
+    // addressBook.java
+    static String ADDR_STATE="addrState";
+    static String ADDR_CITY="addrCity";
+    static String ADDR_LAT="addrLat";
+    static String ADDR_LONG="addrLong";
+
     // addAddress.java
     static String PPK_STATENAME="stateName";
     static String PPK_CITYNAME="cityName";
