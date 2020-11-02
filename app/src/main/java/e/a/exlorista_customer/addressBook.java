@@ -3,6 +3,7 @@ package e.a.exlorista_customer;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,8 +47,8 @@ import e.a.exlorista_customer.ProgressDialog.progressDialog;
 public class addressBook extends AppCompatActivity implements LocationListener {
 
 
-    private static final long MIN_TIME = 2000;
-    private static final float MIN_DISTANCE = 10;
+    private static final long MIN_TIME = 5000;
+    private static final float MIN_DISTANCE = 20;
 
     enum userPermissionResponse {LOCATION_NOT_ENABLED, PERMISSION_DENIED, PERMISSION_DENIED_WITH_NEVERASKAGAIN}
 
@@ -58,6 +59,7 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     private static final int REQUEST_CHECK_SETTINGS = 2;
     boolean gps_enabled = false;
     boolean isNetworkOn = false;
+    boolean isPermissionAllow = false;
     LocationRequest locationRequest;
 
     Button addNewAddressB;
@@ -72,7 +74,8 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     private Double latitude;
     private String current_State;
     private String current_City;
-    progressDialog progressDailog;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +88,11 @@ public class addressBook extends AppCompatActivity implements LocationListener {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         isNetworkOn = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+
         // initilize Dailog
-        progressDailog = new progressDialog(this);
+        progressDialog = new ProgressDialog(this);
+        //  progressDailog = new progressDialog(this);
 
 
         mContext = this;
@@ -98,50 +104,55 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
 
-                if (!gps_enabled) {
-                    Log.d("Connection", "Connection Off");
-                    if (gpsEnabled(mContext)) {
-                        //Log.i("LOCATION","Gps is enabled");
-                        // Call below code only when location access is granted and lat, long is fetched
-                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                                == PackageManager.PERMISSION_GRANTED) {
-                            Log.i("LOCATION", "Permission already granted");
 
+                Log.d("Connection", "Connection Off");
+                if (gpsEnabled(mContext)) {
+                    //Log.i("LOCATION","Gps is enabled");
+                    // Call below code only when location access is granted and lat, long is fetched
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        Log.i("LOCATION", "Permission already granted");
+                        progressDialog.show();
+                        progressDialog.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
+                        getCurrentLocation();
 
-
-                        } else {
-                            Log.i("LOCATION", "Permission not granted. Requesting permission.");
-                            ActivityCompat.requestPermissions(addressBook.this
-                                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
-                                    , REQUEST_CODE_LOCATION_PERMISSION);
-                        }
                     } else {
-                        Log.i("LOCATION", "Gps is disabled.");
-                        setLocationSettings();
+                        Log.i("LOCATION", "Permission not granted. Requesting permission.");
+                        ActivityCompat.requestPermissions(addressBook.this
+                                , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
+                                , REQUEST_CODE_LOCATION_PERMISSION);
                     }
+                } else {
+                    Log.i("LOCATION", "Gps is disabled.");
+                    setLocationSettings();
                 }
 
-                getCurrentLocation();
 
-                if(gps_enabled){
+                if (isPermissionAllow) {
+                    progressDialog.show();
+                    progressDialog.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
+                }
 
-                    progressDailog.startLoading();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        if (gps_enabled) {
 
                             Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
                             addressBookToAddAddressIntent.putExtra("current_State", current_State);
                             addressBookToAddAddressIntent.putExtra("current_City", current_City);
                             startActivity(addressBookToAddAddressIntent);
-                            progressDailog.stopLoading();
-                        }
-                    },3000);
+                            progressDialog.dismiss();
 
-                }else{
-                    Log.i("GPS", "GPS Off");
-                }
+                        } else {
+                            Log.i("GPS", "GPS Off");
+                        }
+
+                    }
+                }, 15000);
 
 
             }
@@ -152,7 +163,6 @@ public class addressBook extends AppCompatActivity implements LocationListener {
         addressListRV.setLayoutManager(addressListRVLayoutManager);
         addressListRV.setAdapter(addressListRVAdapter);
         setLocationRequest();
-
 
 
     }
@@ -166,15 +176,47 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.i("LOCATION", "Permission already granted");
-               locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
                 if (locationManager != null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location != null) {
-                        onLocationChanged(location);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (location != null) {
+                                onLocationChanged(location);
 
-                    } else {
-                        Log.i("LOCATION", "Can't find Location");
-                    }
+                            } else {
+                                Log.i("LOCATION", "Can't find Location");
+                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                if (location != null) {
+                                    onLocationChanged(location);
+
+                                }
+                            }
+                        }
+                    }, 5000);
+
                 }
 
             } else {
@@ -185,21 +227,38 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             }
 
 
-        } else{
-
-            if(isNetworkOn){
+        } else
+            {
+            if (isNetworkOn) {
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     Log.i("LOCATION", "Permission already granted");
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
                     if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            onLocationChanged(location);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                if (location != null) {
+                                    onLocationChanged(location);
 
-                        } else {
-                            Log.i("LOCATION", "Can't find Location");
-                        }
+                                } else {
+                                    Log.i("LOCATION", "Can't find Location");
+                                }
+                            }
+                        }, 5000);
+
                     }
                 } else {
                     Log.i("LOCATION", "Permission not granted. Requesting permission.");
@@ -208,14 +267,13 @@ public class addressBook extends AppCompatActivity implements LocationListener {
                             , REQUEST_CODE_LOCATION_PERMISSION);
                 }
 
-            }else{
+            } else {
                 Log.i("LOCATION", "Networkprovider is Off.");
             }
 
 
         }
     }
-
 
 
     @Override
@@ -304,6 +362,12 @@ public class addressBook extends AppCompatActivity implements LocationListener {
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
+                        isPermissionAllow = true;
+                        // progressDailog.startLoading();
+                        progressDialog.show();
+                        progressDialog.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
+                        gpsEnabled(getApplicationContext());
+                        getCurrentLocation();
                         // All required changes were successfully made
                         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                                 == PackageManager.PERMISSION_GRANTED) {
@@ -333,6 +397,24 @@ public class addressBook extends AppCompatActivity implements LocationListener {
                 }
                 break;
         }
+
+//            progressDailog.startLoading();
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(isNetworkOn&&gps_enabled){
+//                        getCurrentLocation();
+//                        Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
+//                        addressBookToAddAddressIntent.putExtra("current_State", current_State);
+//                        addressBookToAddAddressIntent.putExtra("current_City", current_City);
+//                        startActivity(addressBookToAddAddressIntent);
+//                        progressDailog.stopLoading();
+//                    }
+//
+//                }
+//            }, 30000);
+
     }
 
     private void msgExplanation(userPermissionResponse permission_response) {
@@ -429,6 +511,7 @@ public class addressBook extends AppCompatActivity implements LocationListener {
         try {
             if (locationManager != null) {
                 gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
             } else {
                 Log.i("LOCATION", "locationManager is null");
             }
@@ -483,6 +566,15 @@ public class addressBook extends AppCompatActivity implements LocationListener {
     public void onProviderDisabled(String s) {
         if (locationManager != null) {
             locationManager.removeUpdates(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+
         }
     }
 }
