@@ -3,7 +3,9 @@ package e.a.exlorista_customer;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +27,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderHistoryViewHolder>{
+public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderHistoryViewHolder> {
 
     private Context mContext;
     private ArrayList<String> orderId;
@@ -56,8 +65,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private ArrayList<String> orderDeliveryCharge;
     private ArrayList<String> orderGrandTotal;
     private ArrayList<String> orderRating;
+    private String mOrderDate, mOrderTime;
 
-    static class OrderHistoryViewHolder extends RecyclerView.ViewHolder{
+
+    static class OrderHistoryViewHolder extends RecyclerView.ViewHolder {
         TextView mStoreNameOrderHistoryTV;
         TextView mStoreAddressOrderHistoryTV;
         TextView mOrderStatusOrderHistoryTV;
@@ -69,50 +80,81 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         public OrderHistoryViewHolder(View itemView) {
             super(itemView);
-            mStoreNameOrderHistoryTV=itemView.findViewById(R.id.storeNameOrderHistoryTV);
-            mStoreAddressOrderHistoryTV=itemView.findViewById(R.id.storeAddressOrderHistoryTV);
-            mOrderStatusOrderHistoryTV=itemView.findViewById(R.id.orderStatusOrderHistoryTV);
+            mStoreNameOrderHistoryTV = itemView.findViewById(R.id.storeNameOrderHistoryTV);
+            mStoreAddressOrderHistoryTV = itemView.findViewById(R.id.storeAddressOrderHistoryTV);
+            mOrderStatusOrderHistoryTV = itemView.findViewById(R.id.orderStatusOrderHistoryTV);
             //mItemsListOrderHistoryLL=itemView.findViewById(R.id.itemsListOrderHistoryLL);
-            mItemsListOrderHistoryTV=itemView.findViewById(R.id.itemsListOrderHistoryTV);
-            mOrderDateTimeOrderHistoryTV=itemView.findViewById(R.id.orderDateTimeOrderHistoryTV);
-            mOrderGrandTotalOrderHistoryTV=itemView.findViewById(R.id.orderGrandTotalOrderHistoryTV);
-            mOrderActionOrderHistoryB=itemView.findViewById(R.id.orderActionOrderHistoryB);
+            mItemsListOrderHistoryTV = itemView.findViewById(R.id.itemsListOrderHistoryTV);
+            mOrderDateTimeOrderHistoryTV = itemView.findViewById(R.id.orderDateTimeOrderHistoryTV);
+            mOrderGrandTotalOrderHistoryTV = itemView.findViewById(R.id.orderGrandTotalOrderHistoryTV);
+            mOrderActionOrderHistoryB = itemView.findViewById(R.id.orderActionOrderHistoryB);
         }
     }
 
     public OrderHistoryAdapter(Context context) {
         this.mContext = context;
-        this.orderId=new ArrayList<String>();
-        this.orderStoreName=new ArrayList<String>();
-        this.orderStoreArea=new ArrayList<String>();
-        this.orderStatus=new ArrayList<String>();
-        this.paymMethod=new ArrayList<String>();
-        this.custaddrAddress=new ArrayList<String>();
-        this.custaddrArea=new ArrayList<String>();
-        this.custaddrLandmark=new ArrayList<String>();
-        this.custaddrCity=new ArrayList<String>();
-        this.productName=new ArrayList<ArrayList<String>>();
-        this.productSize=new ArrayList<ArrayList<String>>();
-        this.productUnit=new ArrayList<ArrayList<String>>();
-        this.productContainer=new ArrayList<ArrayList<String>>();
-        this.productCount=new ArrayList<ArrayList<String>>();
-        this.productStatus=new ArrayList<ArrayList<String>>();
-        this.productAvailabilityStatus=new ArrayList<ArrayList<String>>();
-        this.productMrp=new ArrayList<ArrayList<String>>();
-        this.productStoreprice=new ArrayList<ArrayList<String>>();
-        this.orderDate=new ArrayList<String>();
-        this.orderTime=new ArrayList<String>();
-        this.orderTotal=new ArrayList<String>();
-        this.orderDeliveryCharge=new ArrayList<String>();
-        this.orderGrandTotal=new ArrayList<String>();
-        this.orderRating=new ArrayList<String>();
-        this.getOrderHistory(auxiliary.SERVER_URL+"/fetchOrderHistory.php");
+        this.orderId = new ArrayList<String>();
+        this.orderStoreName = new ArrayList<String>();
+        this.orderStoreArea = new ArrayList<String>();
+        this.orderStatus = new ArrayList<String>();
+        this.paymMethod = new ArrayList<String>();
+        this.custaddrAddress = new ArrayList<String>();
+        this.custaddrArea = new ArrayList<String>();
+        this.custaddrLandmark = new ArrayList<String>();
+        this.custaddrCity = new ArrayList<String>();
+        this.productName = new ArrayList<ArrayList<String>>();
+        this.productSize = new ArrayList<ArrayList<String>>();
+        this.productUnit = new ArrayList<ArrayList<String>>();
+        this.productContainer = new ArrayList<ArrayList<String>>();
+        this.productCount = new ArrayList<ArrayList<String>>();
+        this.productStatus = new ArrayList<ArrayList<String>>();
+        this.productAvailabilityStatus = new ArrayList<ArrayList<String>>();
+        this.productMrp = new ArrayList<ArrayList<String>>();
+        this.productStoreprice = new ArrayList<ArrayList<String>>();
+        this.orderDate = new ArrayList<String>();
+        this.orderTime = new ArrayList<String>();
+        this.orderTotal = new ArrayList<String>();
+        this.orderDeliveryCharge = new ArrayList<String>();
+        this.orderGrandTotal = new ArrayList<String>();
+        this.orderRating = new ArrayList<String>();
+        this.getOrderHistory(auxiliary.SERVER_URL + "/fetchOrderHistory.php");
+
+
+    }
+
+
+    private void customDateTimeFormat(String order_date, String order_time) {
+        int style = DateFormat.MEDIUM;
+        Date date ;
+
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+            date = df.parse(order_time);
+            mOrderTime = new SimpleDateFormat("hh:mm a").format(date);
+
+            // get Date
+            java.util.Locale locale = java.util.Locale.US;
+            SimpleDateFormat format =new SimpleDateFormat("yyyy-mm-dd",locale);
+
+            date =format.parse(order_date);
+            mOrderDate  = new SimpleDateFormat("MMMM dd, yyyy").format(date);
+
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        orderDate.add(mOrderDate);
+        orderTime.add(mOrderTime);
+
     }
 
     @NonNull
     @Override
     public OrderHistoryAdapter.OrderHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.orderhistory,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.orderhistory, parent, false);
         return new OrderHistoryViewHolder(v);
     }
 
@@ -121,8 +163,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.mStoreNameOrderHistoryTV.setText(orderStoreName.get(holder.getAdapterPosition()));
         holder.mStoreAddressOrderHistoryTV.setText(orderStoreArea.get(holder.getAdapterPosition()));
         holder.mOrderStatusOrderHistoryTV.setText(orderStatus.get(holder.getAdapterPosition()));
-        holder.mItemsListOrderHistoryTV.setText(Integer.toString(productCount.get(holder.getAdapterPosition()).size())+" items");
-        holder.mOrderDateTimeOrderHistoryTV.setText(orderTime.get(holder.getAdapterPosition())+" "+orderDate.get(holder.getAdapterPosition()));
+        holder.mItemsListOrderHistoryTV.setText(Integer.toString(productCount.get(holder.getAdapterPosition()).size()) + " items");
+        holder.mOrderDateTimeOrderHistoryTV.setText(orderTime.get(holder.getAdapterPosition()) + " " + orderDate.get(holder.getAdapterPosition()));
         holder.mOrderGrandTotalOrderHistoryTV.setText(orderGrandTotal.get(holder.getAdapterPosition()));
     }
 
@@ -131,21 +173,21 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         return orderId.size();
     }
 
-    private void getOrderHistory(final String urlWebService){
-        class GetOrderHistory extends AsyncTask<Void,Void,Void>{
+    private void getOrderHistory(final String urlWebService) {
+        class GetOrderHistory extends AsyncTask<Void, Void, Void> {
             @Override
             protected Void doInBackground(Void... voids) {
-                try{
+                try {
                     URL url = new URL(urlWebService);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoOutput(true);
                     con.setRequestMethod("POST");
                     con.connect();
-                    DataOutputStream dos=new DataOutputStream(con.getOutputStream());
-                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
+                    DataOutputStream dos = new DataOutputStream(con.getOutputStream());
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>() {
                         {
-                            put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
-                            put(auxiliary.PPK_CUSTID,auxiliary.DUMMYVAL_CUSTID);
+                            put(auxiliary.PPK_INITIAL_CHECK, auxiliary.PPV_INITIAL_CHECK);
+                            put(auxiliary.PPK_CUSTID, auxiliary.DUMMYVAL_CUSTID);
                         }
                     }));
                     dos.flush();
@@ -156,18 +198,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json);
                     }
-                    if(!sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_FAIL) &&
+                    if (!sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_FAIL) &&
                             !sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_NOT_SET)) {
                         //Log.i("CONTROL","PPK pass");
                         JSONArray jsonArray = new JSONArray(sb.toString().trim());
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject=jsonArray.getJSONObject(i);
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
                             orderId.add(jsonObject.getString("_order_id"));
                             orderStoreName.add(jsonObject.getString("store_name"));
                             orderStoreArea.add(jsonObject.getString("store_area"));
                             orderStatus.add(jsonObject.getString("orderstat_name"));
-                            orderDate.add(jsonObject.getString("_order_date"));
-                            orderTime.add(jsonObject.getString("_order_time"));
+//                            orderDate.add(jsonObject.getString("_order_date"));
+//                            orderTime.add(jsonObject.getString("_order_time"));
                             orderGrandTotal.add(jsonObject.getString("_order_grandTotal"));
                             paymMethod.add(jsonObject.getString("paym_method"));
                             custaddrAddress.add(jsonObject.getString("custaddr_address"));
@@ -183,8 +225,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                             productAvailabilityStatus.add(new ArrayList<String>());
                             productMrp.add(new ArrayList<String>());
                             productStoreprice.add(new ArrayList<String>());
-                            int prod_count_diff=jsonObject.getJSONArray("proddet_name").length();
-                            for(int j=0;j<prod_count_diff;j++){
+                            int prod_count_diff = jsonObject.getJSONArray("proddet_name").length();
+                            for (int j = 0; j < prod_count_diff; j++) {
                                 productName.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
                                 productSize.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
                                 productUnit.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
@@ -195,28 +237,29 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                                 productMrp.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
                                 productStoreprice.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
                             }
+                            customDateTimeFormat(jsonObject.getString("_order_date"), jsonObject.getString("_order_time"));
                         }
-                        Log.i("order id arraylist size",Integer.toString(orderId.size()));
+                        Log.i("order id arraylist size", Integer.toString(orderId.size()));
                     } else {
-                        Log.i("CONTROL","PPK failed or not set");
+                        Log.i("CONTROL", "PPK failed or not set");
                     }
                 } catch (JSONException e) {
-                    Log.i("exception","JSONException in OrderHistoryAdapter");
+                    Log.i("exception", "JSONException in OrderHistoryAdapter");
                     e.printStackTrace();
-                } catch (MalformedURLException mue){
-                    Log.i("exception","MalformedURLException in OrderHistoryAdapter");
+                } catch (MalformedURLException mue) {
+                    Log.i("exception", "MalformedURLException in OrderHistoryAdapter");
                     mue.printStackTrace();
-                } catch (IOException io){
-                    Log.i("exception","IOException in OrderHistoryAdapter");
+                } catch (IOException io) {
+                    Log.i("exception", "IOException in OrderHistoryAdapter");
                     io.printStackTrace();
-                } catch (Exception e){
-                    Log.i("exception","Exception in OrderHistoryAdapter");
+                } catch (Exception e) {
+                    Log.i("exception", "Exception in OrderHistoryAdapter");
                     e.printStackTrace();
                 }
                 return null;
             }
         }
-        GetOrderHistory getOrderHistory=new GetOrderHistory();
+        GetOrderHistory getOrderHistory = new GetOrderHistory();
         try {
             getOrderHistory.execute().get();
         } catch (InterruptedException e) {

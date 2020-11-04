@@ -316,11 +316,11 @@ public class addressBook extends AppCompatActivity {
                                         //Log.i("LOCATION","addresses is null");
                                         return;
                                     }
-                                    /*
+
                                     Log.i("curr_state", curr_state);
                                     Log.i("curr_city", curr_city);
                                     Log.i("curr_lat", Double.toString(curr_lat));
-                                    Log.i("curr_long", Double.toString(curr_long));*/
+                                    Log.i("curr_long", Double.toString(curr_long));
                                     addressBookToAddAddressIntent.putExtra(auxiliary.ADDR_STATE, curr_state);
                                     addressBookToAddAddressIntent.putExtra(auxiliary.ADDR_CITY, curr_city);
                                     addressBookToAddAddressIntent.putExtra(auxiliary.ADDR_LAT

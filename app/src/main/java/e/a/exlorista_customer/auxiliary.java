@@ -132,6 +132,8 @@ class auxiliary{
     static String ADDR_LONG="addrLong";
 
     // addAddress.java
+    static String PPK_ADDRLAT="addrLat";
+    static String PPK_ADDRLONG="addrLong";
     static String PPK_STATENAME="stateName";
     static String PPK_CITYNAME="cityName";
     static String PPK_STATEID="stateId";
