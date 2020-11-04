@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/allside_border"
-    android:layout_marginTop="20dp"
+    android:elevation="2dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    android:background="@color/whiteColor"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/storeDetailsOrderHistoryLL"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
         <TextView
             android:id="@+id/storeNameOrderHistoryTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center" />
+
         <TextView
             android:id="@+id/storeAddressOrderHistoryTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +51,7 @@
             android:id="@+id/orderStatusOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
@@ -68,7 +77,7 @@
             android:id="@+id/itemsListOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
@@ -94,7 +103,7 @@
             android:id="@+id/orderDateTimeOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
@@ -119,22 +128,28 @@
             android:id="@+id/orderGrandTotalOrderHistoryTV"
             android:layout_width="0dp"
             android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:textColor="@color/blackColor"
             android:layout_height="wrap_content"
             android:gravity="right"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/orderActionOrderHistoryB"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/gradient_button"
-        android:textColor="@color/whiteColor"
-        android:fontFamily="@font/comfortaa_bold"
-        app:layout_constraintTop_toBottomOf="@+id/orderGrandTotalOrderHistoryLL"
-        android:text="Repeat order"/>
+        <Button
+            android:id="@+id/orderActionOrderHistoryB"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/whiteColor"
+            android:drawableLeft="@drawable/repeat_order_icon"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="Repeat order"
+            android:textAllCaps="false"
+            android:textColor="@color/fadeBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/orderGrandTotalOrderHistoryLL" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

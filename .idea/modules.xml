@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Exlorista_customer.iml" filepath="$PROJECT_DIR$/.idea/modules/Exlorista_customer.iml" group="Exlorista_customer" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="Exlorista_customer/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Exlorista_customer.iml" filepath="$PROJECT_DIR$/.idea/modules/Exlorista_customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Exlorista_customer.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Exlorista_customer.app.iml" />
     </modules>
   </component>
 </project>

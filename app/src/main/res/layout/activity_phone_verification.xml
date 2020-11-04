@@ -25,17 +25,27 @@
         </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/proceedVerifyB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
             android:layout_marginTop="25dp"
-            android:layout_gravity="center"
-            android:text="proceed"/>
+            android:textColor="@color/whiteColor"
+            android:textAllCaps="false"
+            android:padding="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:background="@drawable/gradient_button"
+            android:layout_gravity="center_horizontal"
+            android:text="Proceed"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/signInWithOtherMethodB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/whiteColor"
+        android:fontFamily="@font/comfortaa_bold"
+        android:background="@drawable/gradient_button"
         app:layout_constraintTop_toBottomOf="@+id/otpInputAndProceedLL"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

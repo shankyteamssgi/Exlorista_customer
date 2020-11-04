@@ -28,4 +28,8 @@
           <item name="android:navigationBarColor">@color/colorPrimary</item>
      </style>
 
+    <style name="MyHintStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/fadeBlack</item>
+    </style>
+
  </resources>

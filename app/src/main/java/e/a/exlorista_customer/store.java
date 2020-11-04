@@ -114,7 +114,7 @@ public class store extends AppCompatActivity
                         // store timings are hidden
                         //Log.i("STORETIMING","store timings were hidden");
                         //Toast.makeText(store.this,"store timings were hidden",Toast.LENGTH_SHORT).show();
-                        storeTimingViewIV.setImageResource(R.drawable.uparrow);
+                        storeTimingViewIV.setImageResource(R.drawable.uparrow_store);
                         storeTimingTextTV.setText("Hide store timings");
                         storeTimingMonStorePageTV.setVisibility(View.VISIBLE);
                         storeTimingTueStorePageTV.setVisibility(View.VISIBLE);
@@ -127,7 +127,7 @@ public class store extends AppCompatActivity
                     } else{
                         // store timings are visible
                         Log.i("STORETIMING","store timings were visible");
-                        storeTimingViewIV.setImageResource(R.drawable.downarrow);
+                        storeTimingViewIV.setImageResource(R.drawable.down_arrow_store);
                         storeTimingTextTV.setText("View store timings");
                         storeTimingMonStorePageTV.setVisibility(View.GONE);
                         storeTimingTueStorePageTV.setVisibility(View.GONE);

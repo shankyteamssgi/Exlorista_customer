@@ -1,5 +1,6 @@
 package e.a.exlorista_customer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -113,12 +114,13 @@ public class loginOrSignup extends AppCompatActivity {
 
         selectedOption=auxiliaryuseraccountmanager.options.LOGIN;
         loginTV.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View view) {
                 selectedOption=auxiliaryuseraccountmanager.options.LOGIN;
-                loginTV.setBackgroundColor(getResources().getColor(R.color.colorActionBarBackground));
+                loginTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 loginTV.setTextColor(getResources().getColor(R.color.colorActionBarTitleText));
-                loginTV.setTextSize(18);
+                loginTV.setTextSize(16);
                 signupTV.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                 signupTV.setTextColor(getResources().getColor(R.color.colorProductBrand));
                 signupTV.setTextSize(14);
@@ -127,12 +129,13 @@ public class loginOrSignup extends AppCompatActivity {
             }
         });
         signupTV.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View view) {
                 selectedOption=auxiliaryuseraccountmanager.options.SIGNUP;
-                signupTV.setBackgroundColor(getResources().getColor(R.color.colorActionBarBackground));
+                signupTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 signupTV.setTextColor(getResources().getColor(R.color.colorActionBarTitleText));
-                signupTV.setTextSize(18);
+                signupTV.setTextSize(16);
                 loginTV.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                 loginTV.setTextColor(getResources().getColor(R.color.colorProductBrand));
                 loginTV.setTextSize(14);

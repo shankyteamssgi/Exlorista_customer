@@ -101,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="0.1"
-                            android:src="@drawable/downarrow" />
+                            android:src="@drawable/down_arrow_store" />
                     </LinearLayout>
                     <TextView
                         android:id="@+id/storeTimingMonStorePageTV"

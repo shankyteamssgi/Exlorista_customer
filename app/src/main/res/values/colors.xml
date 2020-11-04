@@ -18,5 +18,6 @@
     <color name="greenColor">#1fb141</color>
     <color name="blackColor">#000000</color>
     <color name="whiteColor">#ffffff</color>
+    <color name="fadeWhite">#F8F8FF</color>
     <color name="fadeBlack">#696969</color>
 </resources>
