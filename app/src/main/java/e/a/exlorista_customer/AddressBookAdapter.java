@@ -85,10 +85,14 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
     @Override
     public void onBindViewHolder(@NonNull final AddressBookViewHolder holder, int position) {
         holder.tagAddressTV.setText(custaddrTag.get(holder.getAdapterPosition()));
-        holder.completeAddressTV.setText(custaddrAddress.get(holder.getAdapterPosition())+", "+
-                custaddrArea.get(holder.getAdapterPosition())+", "+
-                custaddrLandmark.get(holder.getAdapterPosition())+", "+
-                custaddrCity.get(holder.getAdapterPosition()));
+        String address_complete=custaddrAddress.get(holder.getAdapterPosition());
+        String address_area=custaddrArea.get(holder.getAdapterPosition());
+        String address_landmark=custaddrLandmark.get(holder.getAdapterPosition());
+        String address_city=custaddrCity.get(holder.getAdapterPosition());
+        holder.completeAddressTV.setText(address_complete+(address_complete.equals("")?"":", ")+
+                address_area+(address_area.equals("")?"":", ")+
+                address_landmark+(address_landmark.equals("")?"":", ")+
+                address_city);
 
         holder.deleteAddressB.setOnClickListener(new View.OnClickListener() {
             @Override

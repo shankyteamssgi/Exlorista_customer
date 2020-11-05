@@ -1,18 +1,8 @@
 package e.a.exlorista_customer;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationRequest;
-import com.google.gson.JsonArray;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -52,19 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import e.a.exlorista_customer.Model.areaData;
-import e.a.exlorista_customer.Model.getAreaData;
-
 public class addAddress extends AppCompatActivity {
-
-
-    enum userPermissionResponse {LOCATION_NOT_ENABLED, PERMISSION_DENIED, PERMISSION_DENIED_WITH_NEVERASKAGAIN}
-
-    ;
-    // Location
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-    private static final int REQUEST_CHECK_SETTINGS = 2;
-
 
     private EditText completeAddressET, addressLandmarkET, addOtherTagET;
     private Spinner stateSpinner, citySpinner, areaSpinner;
@@ -72,21 +46,18 @@ public class addAddress extends AppCompatActivity {
     private LinearLayout cityChoiceLL, stateChoiceLL, homeTagLL, officeTagLL;
     private TextView homeTagTextTV, officeTagTextTV;
     private ArrayList<HashMap<String,String>> stateData;
-  // private ArrayList<getAreaData> tempArea;
- //   private HashMap<String,String> tempArea;
     private ArrayList<HashMap<String, String>> cityData;
-   private ArrayList<HashMap<String, String>> areaData;
+    private ArrayList<HashMap<String, String>> areaData;
 
-    enum addressTag {HOME, OFFICE, CUSTOM_TAG}
-
-    ;
+    enum addressTag {HOME, OFFICE, CUSTOM_TAG};
     addressTag selectedAddressTag;
-    LocationRequest locationRequest;
     private Context mContext;
 
-    SharedPreferences sharedPreferences;
-    String currant_State, current_City, add_latitude, add_longitude, address_areaId;
-    String  selected_area;
+    String current_state, current_city, current_latitude, current_longitude;
+    String customer_id,address_complete,address_landmark;
+    StringBuilder address_tag;
+    String selected_area;
+    String address_areaId;
 
 
     @Override
@@ -99,13 +70,12 @@ public class addAddress extends AppCompatActivity {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        currant_State = getIntent().getStringExtra(auxiliary.ADDR_STATE);
-        current_City = getIntent().getStringExtra(auxiliary.ADDR_CITY);
-        add_latitude = getIntent().getStringExtra(auxiliary.ADDR_LAT);
-        add_longitude = getIntent().getStringExtra(auxiliary.ADDR_LONG);
+        current_state = getIntent().getStringExtra(auxiliary.ADDR_STATE);
+        current_city = getIntent().getStringExtra(auxiliary.ADDR_CITY);
+        current_latitude = getIntent().getStringExtra(auxiliary.ADDR_LAT);
+        current_longitude = getIntent().getStringExtra(auxiliary.ADDR_LONG);
 
         //areaData initlize
-
 
         mContext = this;
         saveAddressB = findViewById(R.id.saveAddressB);
@@ -129,54 +99,39 @@ public class addAddress extends AppCompatActivity {
         initializeAddressTagButtons();
         addListenersToTagViews();
 
-
-//        if(auxiliary.gpsEnabled(mContext)){
-//            // GPS is enabled
-//            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-//                    == PackageManager.PERMISSION_GRANTED){
-//                // Permission granted
-//            } else{
-//                // Permission not granted
-//            }
-//        } else{
-//            // GPS is disabled
-//        }
         takeActionForLocationPermissionNotGranted();
         areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!(i == 0)) {
-                    //geting selected area from spinner
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position != 0) {
                    selected_area = areaSpinner.getSelectedItem().toString().trim();
-             }
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
         saveAddressB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateInput();
+                if(validateInput()){
+                    addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
+                            , customer_id
+                            , address_complete
+                            , address_landmark
+                            , current_latitude
+                            , current_longitude
+                            , address_areaId
+                            , address_tag.toString().trim());
+                    Toast.makeText(mContext,"Address added successfully",Toast.LENGTH_LONG).show();
+                    finish();
+                } else{
+                    Log.i("addAddress","input validation failed");
+                }
             }
         });
 
-    }
-
-    private void takeActionForLocationPermissionGranted() {
-
-        // Location permission granted. Take following actions:
-        /*
-        - Make dropdown for state and city gone. For both state and city, hide the complete LinearLayout encapsulating Spinner and TextView.
-        - Fetch state, city from location.
-        - Match name of city and state with name of city and state in database and fetch id of city and state.
-          If match is unsuccessful, fetch states from database, make dropdown for state and city visible and display list of cities based on state chosen.
-        - Retrieve list of areas from database based on the fetched/chosen state and city. Put those areas in the spinner for area.
-        - Validate inputs.
-        - If input validation is successful, add address to database.
-         */
     }
 
     private void takeActionForLocationPermissionNotGranted() {
@@ -189,7 +144,7 @@ public class addAddress extends AppCompatActivity {
         - If input validation is successful, add address to database.
          */
 
-        if (currant_State == null && current_City == null) {
+        if (current_state == null && current_city == null) {
 
             stateChoiceLL.setVisibility(View.VISIBLE);
             cityChoiceLL.setVisibility(View.VISIBLE);
@@ -258,7 +213,7 @@ public class addAddress extends AppCompatActivity {
 
             fetchAreaData(auxiliary.SERVER_URL + "/addressBookManager.php"
                     , null
-                    , null, currant_State, current_City);
+                    , null, current_state, current_city);
 
             areaSpinner.setAdapter(new ArrayAdapter<>(mContext
                     , android.R.layout.simple_spinner_dropdown_item
@@ -295,8 +250,8 @@ public class addAddress extends AppCompatActivity {
 //                    ,customer_id
 //                    ,address_complete
 //                    ,address_landmark
-//                    ,add_latitude
-//                    ,add_longitude
+//                    ,current_latitude
+//                    ,current_longitude
 //                    ,address_areaId
 //                    ,address_tag.toString().trim());
 //        } else{
@@ -367,69 +322,38 @@ public class addAddress extends AppCompatActivity {
         }
     }
 
-    private void validateInput() {
-//        boolean validationStatus=true;
-//        StringBuilder error_message=new StringBuilder();
-//        if(completeAddressET.getText().toString().length()==0){
-//            error_message.append("Address cannot be empty. ");
-//            return false;
-//        } else if(completeAddressET.getText().toString().length()>auxiliary.COMPLETEADDRESS_MAXLENGTH){
-//            error_message.append("Address length exceeded. ");
-//            return false;
-//        }
-//        if(addressLandmarkET.getText().toString().length()>auxiliary.LANDMARK_MAXLENGTH){
-//            error_message.append("Landmark length exceeded. ");
-//            return false;
-//        }
-//        if(stateSpinner.getSelectedItemPosition()==0){
-//            error_message.append("Select a state. ");
-//            return false;
-//        }
-//        if(citySpinner.getSelectedItemPosition()==0){
-//            error_message.append("Select a city. ");
-//            return false;
-//        }
-//        if(areaSpinner.getSelectedItemPosition()==0){
-//            error_message.append("Select an area. ");
-//            return false;
-//        }
-//        if(selectedAddressTag==null){
-//            error_message.append("Select or add a tag");
-//            return false;
-//        } else if(selectedAddressTag==addressTag.CUSTOM_TAG && addOtherTagET.getText().toString().length()>auxiliary.CUSTOMTAG_MAXLENGTH){
-//            error_message.append("Length of tag cannot exceed ").append(Integer.toString(auxiliary.CUSTOMTAG_MAXLENGTH)).append(" ");
-//            return false;
-//        }
-//        Toast.makeText(mContext,error_message.toString().trim(),Toast.LENGTH_LONG).show();
-//        return validationStatus;
-
-
+    private boolean validateInput() {
+        boolean validationStatus=true;
+        StringBuilder error_message = new StringBuilder();
         try {
-            StringBuilder error_message = new StringBuilder();
-            String customer_id = auxiliary.DUMMYVAL_CUSTID;
-            String address_complete = completeAddressET.getText().toString().trim();
-            String address_landmark = addressLandmarkET.getText().toString().trim();
+            customer_id = auxiliary.DUMMYVAL_CUSTID;
+            address_complete = completeAddressET.getText().toString().trim();
+            address_landmark = addressLandmarkET.getText().toString().trim();
             // geting key for selected area
+            /*
             for(HashMap<String, String> map: areaData) {
-                boolean getKay=false;
+                boolean getKey=false;
                 for (Map.Entry<String, String> mapEntry : map.entrySet()) {
                     if(mapEntry.getValue().equals(selected_area)){
                         address_areaId  = mapEntry.getKey();
-                        getKay=true;
+                        getKey=true;
                         break; }
                 }
-                if(getKay){
+                if(getKey){
                     break;
                 }
+            }*/
+            if(selected_area==null){
+                validationStatus=false;
+                error_message.append("Select an area.").append(" ");
             }
-            StringBuilder address_tag = new StringBuilder();
-
+            address_areaId=auxiliary.findKeyForGivenValueInArrayListOfHM(areaData,selected_area);
+            address_tag = new StringBuilder();
             if (selectedAddressTag == null) {
-                error_message.append("Select or add a tag");
-                Toast.makeText(mContext, error_message.toString().trim(), Toast.LENGTH_LONG).show();
-            } else if (selectedAddressTag != null) {
+                validationStatus=false;
+                error_message.append("Select or add a tag.").append(" ");
+            } else{
                 switch (selectedAddressTag) {
-
                     case HOME:
                         address_tag.append("home");
                         break;
@@ -437,52 +361,44 @@ public class addAddress extends AppCompatActivity {
                         address_tag.append("office");
                         break;
                     case CUSTOM_TAG:
-                        address_tag.append(addOtherTagET.getText().toString().trim());
+                        if(addOtherTagET.getText().toString().equals("")){
+                            addOtherTagET.setError("Add a tag");
+                        } else{
+                            if(addOtherTagET.getText().toString().length() > auxiliary.CUSTOMTAG_MAXLENGTH){
+                                validationStatus=false;
+                                error_message.append("Length of tag cannot exceed ").append(auxiliary.CUSTOMTAG_MAXLENGTH).append(". ");
+                            } else{
+                                address_tag.append(addOtherTagET.getText().toString().trim());
+                            }
+                        }
                         break;
                 }
-
-            } else if (selectedAddressTag == addressTag.CUSTOM_TAG && addOtherTagET.getText().toString().length() > auxiliary.CUSTOMTAG_MAXLENGTH) {
-                error_message.append("Length of tag cannot exceed ").append(auxiliary.CUSTOMTAG_MAXLENGTH).append(" ");
-                Toast.makeText(mContext, error_message.toString().trim(), Toast.LENGTH_LONG).show();
             }
 
             if (address_complete.equals("")) {
+                validationStatus=false;
                 completeAddressET.requestFocus();
                 completeAddressET.setError("Address can't be empty!");
             } else if (address_complete.length() > auxiliary.COMPLETEADDRESS_MAXLENGTH) {
+                validationStatus=false;
                 completeAddressET.requestFocus();
                 completeAddressET.setError("Address length exceeded.");
-
-            } else if (address_landmark.equals("")) {
-                addressLandmarkET.requestFocus();
-                addressLandmarkET.setError("Field can't be empty!");
-            } else if (address_landmark.length() > auxiliary.LANDMARK_MAXLENGTH) {
+            }
+            if (address_landmark.length() > auxiliary.LANDMARK_MAXLENGTH) {
+                validationStatus=false;
                 addressLandmarkET.requestFocus();
                 addressLandmarkET.setError("Landmark length exceeded.");
-            } else if (address_tag.equals("") && selectedAddressTag.equals("")) {
-                addOtherTagET.requestFocus();
-                addOtherTagET.setError("Field can't be empty!");
-
             }
-            if (!address_areaId.equals("")) {
-                // add address to database
-                addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
-                        , customer_id
-                        , address_complete
-                        , address_landmark
-                        , add_latitude
-                        , add_longitude
-                        , address_areaId
-                        , address_tag.toString().trim());
-
-            } else {
-               Log.d("Area->","Area id is null.");
+            if(address_areaId.equals("")){
+                validationStatus=false;
+                Log.i("Area->","area id is null.");
             }
-
-
         } catch (Exception e) {
+            validationStatus=false;
             e.printStackTrace();
         }
+        Toast.makeText(mContext,error_message.toString().trim(),Toast.LENGTH_LONG).show();
+        return validationStatus;
     }
 
     private void initializeGeographyData(boolean initialize_state_data,

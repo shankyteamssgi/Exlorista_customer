@@ -46,6 +46,9 @@ class auxiliary{
     //static String SERVER_URL="http://ec2-3-16-188-152.us-east-2.compute.amazonaws.com/app";
     static String SERVER_URL="http://3.16.188.152/app";
 
+    // server response Strings
+    static String NULL="null";
+
     //ProgressDialog message
     final static String PROGRESS_DIALOG_MESSAGE="Please wait";
 
@@ -299,6 +302,15 @@ class auxiliary{
             ah_return.add(ah.get(i).values().iterator().next());
         }
         return ah_return;
+    }
+
+    static String findKeyForGivenValueInArrayListOfHM(ArrayList<HashMap<String,String>> ah,String value){
+        for(int i=0;i<ah.size();i++){
+            if(ah.get(i).values().iterator().next().equals(value)){
+                return ah.get(i).keySet().iterator().next();
+            }
+        }
+        return null;
     }
 
     static ArrayList<String> strToArrayList(String str,String delimiter){
