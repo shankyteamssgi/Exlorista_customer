@@ -267,6 +267,7 @@ public class loginOrSignup extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException apie) {
                 // Google Sign In failed, update UI appropriately

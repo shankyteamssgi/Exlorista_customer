@@ -36,6 +36,7 @@
             android:layout_height="0dp"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
+            android:layout_marginLeft="3.5dp"
             android:textAllCaps="true"
             android:textStyle="bold" />
 
@@ -45,6 +46,7 @@
             android:layout_width="wrap_content"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_height="0dp"
+            android:layout_marginLeft="3.5dp"
             android:layout_weight="0.2" />
 
         <TextView
@@ -52,23 +54,54 @@
             android:layout_width="wrap_content"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_height="0dp"
+            android:layout_marginLeft="3.5dp"
             android:layout_weight="0.2" />
 
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="13dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="0.0"
+            android:src="@drawable/rupee"/>
         <TextView
             android:id="@+id/cartProductMrpTV"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="13dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="0.0"
+            android:src="@drawable/rupee"/>
 
         <TextView
             android:id="@+id/cartProductPriceTV"
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textStyle="bold"/>
+    </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -105,12 +138,31 @@
             android:background="@drawable/btn_decrease"
             android:textStyle="bold"
             android:text="-"/>
+
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="13dp"
+            android:layout_marginTop="1dp"
+
+            android:layout_gravity="center"
+            android:src="@drawable/rupee"/>
+
         <TextView
             android:id="@+id/cartThisItemTotalCostTV"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.16"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBodyText"
+            android:layout_marginTop="1dp"
             android:layout_gravity="center" />
+    </LinearLayout>
+
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

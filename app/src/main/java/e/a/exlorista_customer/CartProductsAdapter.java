@@ -2,6 +2,7 @@ package e.a.exlorista_customer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,9 +96,10 @@ public class CartProductsAdapter extends RecyclerView.Adapter<CartProductsAdapte
         holder.mCartProductNameTV.setText(IHMK_vals[2]);
         holder.mCartProductSizeUnitContainerTV.setText(IHMK_vals[3]);
         holder.mCartProductMrpTV.setText(IHMK_vals[4]);
+        holder.mCartProductMrpTV.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         holder.mCartProductPriceTV.setText(IHMK_vals[5]);
         holder.mCartThisProdCountTV.setText(IHMK_vals[6]);
-        String thisItemTotalCost_String=String.format("Rs %s",Integer.toString(
+        String thisItemTotalCost_String=String.format(Integer.toString(
                 Integer.parseInt(IHMK_vals[6])*Integer.parseInt(IHMK_vals[5].matches("\\d+")?IHMK_vals[5]:IHMK_vals[5].substring(3))
         ));
         holder.mCartThisItemTotalCostTV.setText(thisItemTotalCost_String);

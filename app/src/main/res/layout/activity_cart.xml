@@ -196,14 +196,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Total"/>
+            <LinearLayout
+                android:layout_marginTop="2dp"
+                android:gravity="right|center"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+
+                    android:layout_gravity="center"
+                    android:src="@drawable/rupee"/>
                 <TextView
                     android:id="@+id/cartTotalTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.7"
+                    android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:gravity="right"
                     android:textColor="@color/colorBodyText" />
+
+            </LinearLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -221,14 +239,32 @@
                     android:textColor="@color/blackColor"
                     android:fontFamily="@font/comfortaa_bold"
                     android:text="Delivery charges"/>
+
+            <LinearLayout
+                android:layout_marginTop="2dp"
+                android:gravity="right|center"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+
+                    android:layout_gravity="center"
+                    android:src="@drawable/rupee"/>
                 <TextView
                     android:id="@+id/cartDeliveryChargesTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.7"
+                    android:layout_width="wrap_content"
+
                     android:layout_marginRight="15dp"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:textColor="@color/colorBodyText" />
+
+            </LinearLayout>
+
             </LinearLayout>
 
             <TextView
@@ -270,16 +306,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="0.4"
+                    android:layout_marginLeft="3.5dp"
                     android:textColor="@color/colorActionBarTitleText"
                     android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_marginTop="2dp"
+                android:gravity="left|center"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                >
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="1dp"
+
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_rupeewhitee"/>
+
                 <TextView
                     android:id="@+id/cartGrandTotalAmount_CartTV"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.6"
+                    android:layout_height="wrap_content"
+
                     android:textColor="@color/colorActionBarTitleText"
                     android:textStyle="bold"
                     android:textSize="20sp" />
+
+            </LinearLayout>
+
+
             </LinearLayout>
 
             <Button

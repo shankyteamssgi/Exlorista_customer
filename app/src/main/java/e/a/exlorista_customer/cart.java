@@ -149,7 +149,7 @@ public class cart extends AppCompatActivity implements CartProductsAdapter.CartP
             cartItemCount_CartTV.setText(Integer.toString(cartItemCount)+" items");
             cartTotalTV.setText(Integer.toString(cart_total));
             cartDeliveryChargesTV.setText(Integer.toString(cart_deliveryCharge));
-            cartGrandTotalAmount_CartTV.setText("Rs "+Integer.toString(cart_grandTotal));
+            cartGrandTotalAmount_CartTV.setText(Integer.toString(cart_grandTotal));
         } else{
             cartSummary_CartNSV.setVisibility(View.GONE);
             cartDeliveryChargesLL.setVisibility(View.GONE);

@@ -34,6 +34,7 @@
             android:textColor="@color/colorProductBrand"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginLeft="3.5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2"
             android:textAllCaps="true"
@@ -44,6 +45,7 @@
             android:textColor="@color/colorBodyText"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginLeft="3.5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
 
@@ -52,23 +54,41 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:fontFamily="@font/comfortaa_bold"
+            android:layout_marginLeft="3.5dp"
             android:layout_weight="0.2" />
 
         <TextView
             android:id="@+id/storeProductMrpTV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginLeft="3.5dp"
             android:fontFamily="@font/comfortaa_bold"
             android:layout_weight="0.2" />
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="0.0"
+                android:src="@drawable/rupee"/>
 
-        <TextView
-            android:id="@+id/storeProductPriceTV"
-            android:textColor="@color/colorBodyText"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:layout_weight="0.2"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/storeProductPriceTV"
+                android:textColor="@color/colorBodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_bold"
+                android:layout_weight="0.2"
+                android:gravity="start|center"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
