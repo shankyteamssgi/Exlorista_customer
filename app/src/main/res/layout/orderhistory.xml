@@ -7,148 +7,154 @@
     android:layout_marginTop="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/storeDetailsOrderHistoryLL"
-        android:orientation="vertical"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/orderHistoryCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/storeNameOrderHistoryTV"
+        <LinearLayout
+            android:id="@+id/storeDetailsOrderHistoryLL"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
-        <TextView
-            android:id="@+id/storeAddressOrderHistoryTV"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/storeNameOrderHistoryTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/storeAddressOrderHistoryTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderStatusOrderHistoryLL"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
-    </LinearLayout>
+            android:paddingRight="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/storeDetailsOrderHistoryLL">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:text="Status"/>
+            <TextView
+                android:id="@+id/orderStatusOrderHistoryTV"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:gravity="right"/>
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/orderStatusOrderHistoryLL"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="2dp"
-        app:layout_constraintTop_toBottomOf="@+id/storeDetailsOrderHistoryLL">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.3"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
+        <LinearLayout
+            android:id="@+id/itemsOrderHistoryLL"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Status"/>
-        <TextView
-            android:id="@+id/orderStatusOrderHistoryTV"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
+            android:paddingRight="2dp"
+            app:layout_constraintTop_toBottomOf="@id/orderStatusOrderHistoryLL">
+            <TextView
+                android:id="@+id/itemsOrderHistoryTextTV"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:text="Items"/>
+            <TextView
+                android:id="@+id/itemsListOrderHistoryTV"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderDateTimeOrderHistoryLL"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"/>
-    </LinearLayout>
+            android:paddingRight="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/itemsOrderHistoryLL">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:text="Ordered on"/>
+            <TextView
+                android:id="@+id/orderDateTimeOrderHistoryTV"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:gravity="right"/>
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/itemsOrderHistoryLL"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="2dp"
-        app:layout_constraintTop_toBottomOf="@id/orderStatusOrderHistoryLL">
-        <TextView
-            android:id="@+id/itemsOrderHistoryTextTV"
-            android:layout_width="0dp"
-            android:layout_weight="0.3"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
+        <RelativeLayout
+            android:id="@+id/orderGrandTotalOrderHistoryLL"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Items"/>
-        <TextView
-            android:id="@+id/itemsListOrderHistoryTV"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
-            android:layout_height="wrap_content"
-            android:gravity="right">
-        </TextView>
-    </LinearLayout>
+            android:paddingRight="2dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/orderDateTimeOrderHistoryLL">
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/gTotal"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:gravity="left"
 
-    <LinearLayout
-        android:id="@+id/orderDateTimeOrderHistoryLL"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="2dp"
-        app:layout_constraintTop_toBottomOf="@+id/itemsOrderHistoryLL">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.3"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
-            android:layout_height="wrap_content"
-            android:text="Ordered on"/>
-        <TextView
-            android:id="@+id/orderDateTimeOrderHistoryTV"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
-            android:layout_height="wrap_content"
-            android:gravity="right"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/orderGrandTotalOrderHistoryLL"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="2dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/orderDateTimeOrderHistoryLL">
-        <TextView
-            android:layout_width="wrap_content"
-            android:id="@+id/gTotal"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
-            android:gravity="left"
-
-            android:layout_height="wrap_content"
-            android:text="Grand total"/>
+                android:layout_height="wrap_content"
+                android:text="Grand total"/>
 
 
-        <ImageView
+            <ImageView
 
-            android:layout_width="20dp"
-            android:layout_height="13dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="1dp"
-            android:layout_toLeftOf="@+id/orderGrandTotalOrderHistoryTV"
+                android:layout_width="20dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toLeftOf="@+id/orderGrandTotalOrderHistoryTV"
 
-            android:layout_marginRight="1dp"
-            android:src="@drawable/rupee"
-            tools:ignore="RtlHardcoded" />
+                android:layout_marginRight="1dp"
+                android:src="@drawable/rupee"
+                tools:ignore="RtlHardcoded" />
 
 
-        <TextView
-            android:id="@+id/orderGrandTotalOrderHistoryTV"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/orderGrandTotalOrderHistoryTV"
+                android:layout_width="wrap_content"
 
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@color/blackColor"
-            android:layout_height="wrap_content"
-           android:layout_alignParentEnd="true"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textColor="@color/blackColor"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
 
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/orderActionOrderHistoryB"
@@ -158,7 +164,7 @@
         android:background="@drawable/gradient_button"
         android:textColor="@color/whiteColor"
         android:fontFamily="@font/comfortaa_bold"
-        app:layout_constraintTop_toBottomOf="@+id/orderGrandTotalOrderHistoryLL"
+        app:layout_constraintTop_toBottomOf="@+id/orderHistoryCL"
         android:text="Repeat order"/>
 
 </android.support.constraint.ConstraintLayout>

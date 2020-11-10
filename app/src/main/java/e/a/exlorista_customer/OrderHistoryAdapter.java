@@ -1,11 +1,13 @@
 package e.a.exlorista_customer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,6 +80,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         TextView mOrderGrandTotalOrderHistoryTV;
         Button mOrderActionOrderHistoryB;
 
+        ConstraintLayout mOrderHistoryCL;
+
         public OrderHistoryViewHolder(View itemView) {
             super(itemView);
             mStoreNameOrderHistoryTV = itemView.findViewById(R.id.storeNameOrderHistoryTV);
@@ -88,6 +92,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             mOrderDateTimeOrderHistoryTV = itemView.findViewById(R.id.orderDateTimeOrderHistoryTV);
             mOrderGrandTotalOrderHistoryTV = itemView.findViewById(R.id.orderGrandTotalOrderHistoryTV);
             mOrderActionOrderHistoryB = itemView.findViewById(R.id.orderActionOrderHistoryB);
+
+            mOrderHistoryCL=itemView.findViewById(R.id.orderHistoryCL);
         }
     }
 
@@ -159,13 +165,41 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderHistoryAdapter.OrderHistoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OrderHistoryAdapter.OrderHistoryViewHolder holder, int position) {
         holder.mStoreNameOrderHistoryTV.setText(orderStoreName.get(holder.getAdapterPosition()));
         holder.mStoreAddressOrderHistoryTV.setText(orderStoreArea.get(holder.getAdapterPosition()));
         holder.mOrderStatusOrderHistoryTV.setText(orderStatus.get(holder.getAdapterPosition()));
         holder.mItemsListOrderHistoryTV.setText(Integer.toString(productCount.get(holder.getAdapterPosition()).size()) + " items");
         holder.mOrderDateTimeOrderHistoryTV.setText(orderTime.get(holder.getAdapterPosition()) + " " + orderDate.get(holder.getAdapterPosition()));
         holder.mOrderGrandTotalOrderHistoryTV.setText(orderGrandTotal.get(holder.getAdapterPosition()));
+        holder.mOrderHistoryCL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OrderHistoryAdapter.this.orderHistoryClicked(orderId.get(holder.getAdapterPosition())
+                        ,orderStatus.get(holder.getAdapterPosition())
+                        ,orderTotal.get(holder.getAdapterPosition())
+                        ,orderDeliveryCharge.get(holder.getAdapterPosition())
+                        ,orderGrandTotal.get(holder.getAdapterPosition())
+                        ,paymMethod.get(holder.getAdapterPosition())
+                        ,orderDate.get(holder.getAdapterPosition())
+                        ,orderTime.get(holder.getAdapterPosition())
+                        ,custaddrAddress.get(holder.getAdapterPosition())+", "
+                                +custaddrLandmark.get(holder.getAdapterPosition())+", "
+                                +custaddrArea.get(holder.getAdapterPosition())+", "
+                                +custaddrCity.get(holder.getAdapterPosition())
+                        ,productName.get(holder.getAdapterPosition())
+                        ,productSize.get(holder.getAdapterPosition())
+                        ,productUnit.get(holder.getAdapterPosition())
+                        ,productContainer.get(holder.getAdapterPosition())
+                        ,productCount.get(holder.getAdapterPosition())
+                        ,productStatus.get(holder.getAdapterPosition())
+                        ,productAvailabilityStatus.get(holder.getAdapterPosition())
+                        ,productMrp.get(holder.getAdapterPosition())
+                        ,productStoreprice.get(holder.getAdapterPosition())
+                        ,orderStoreName.get(holder.getAdapterPosition())
+                        ,orderStoreArea.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -210,6 +244,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                             orderStatus.add(jsonObject.getString("orderstat_name"));
 //                            orderDate.add(jsonObject.getString("_order_date"));
 //                            orderTime.add(jsonObject.getString("_order_time"));
+                            orderTotal.add(jsonObject.getString("_order_total"));
+                            orderDeliveryCharge.add(jsonObject.getString("_order_deliveryCharge"));
                             orderGrandTotal.add(jsonObject.getString("_order_grandTotal"));
                             paymMethod.add(jsonObject.getString("paym_method"));
                             custaddrAddress.add(jsonObject.getString("custaddr_address"));
@@ -228,14 +264,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                             int prod_count_diff = jsonObject.getJSONArray("proddet_name").length();
                             for (int j = 0; j < prod_count_diff; j++) {
                                 productName.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productSize.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productUnit.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productContainer.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productCount.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productStatus.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productAvailabilityStatus.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productMrp.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
-                                productStoreprice.get(i).add(jsonObject.getJSONArray("proddet_name").getString(j));
+                                productSize.get(i).add(jsonObject.getJSONArray("prod_size").getString(j));
+                                productUnit.get(i).add(jsonObject.getJSONArray("produnit_name").getString(j));
+                                productContainer.get(i).add(jsonObject.getJSONArray("prodcontain_name").getString(j));
+                                productCount.get(i).add(jsonObject.getJSONArray("orderproddet_count").getString(j));
+                                productStatus.get(i).add(jsonObject.getJSONArray("prodstat_name").getString(j));
+                                productAvailabilityStatus.get(i).add(jsonObject.getJSONArray("prodavailstat_stat").getString(j));
+                                productMrp.get(i).add(jsonObject.getJSONArray("orderproddet_mrp").getString(j));
+                                productStoreprice.get(i).add(jsonObject.getJSONArray("orderproddet_storeprice").getString(j));
                             }
                             customDateTimeFormat(jsonObject.getString("_order_date"), jsonObject.getString("_order_time"));
                         }
@@ -267,5 +303,50 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    private void orderHistoryClicked(String order_id,
+                                     String order_status,
+                                     String order_total,
+                                     String order_deliveryCharge,
+                                     String order_grandTotal,
+                                     String order_paymMethod,
+                                     String order_date,
+                                     String order_time,
+                                     String order_deliveryAddress,
+                                     ArrayList<String> order_prodName,
+                                     ArrayList<String> order_prodSize,
+                                     ArrayList<String> order_prodUnit,
+                                     ArrayList<String> order_prodContainer,
+                                     ArrayList<String> order_prodCount,
+                                     ArrayList<String> order_prodStatus,
+                                     ArrayList<String> order_prodAvailabilityStatus,
+                                     ArrayList<String> order_prodMrp,
+                                     ArrayList<String> order_prodStorePrice,
+                                     String order_storeName,
+                                     String order_storeArea){
+        Intent orderHistoryAdapterToOrderDetailIntent=new Intent(this.mContext,orderDetail.class);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_ID,order_id);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_STATUS,order_status);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_TOTAL,order_total);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_DELIVERYCHARGE,order_deliveryCharge);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_GRANDTOTAL,order_grandTotal);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_PAYMMETHOD,order_paymMethod);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_DATE,order_date);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_TIME,order_time);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_DELIVERYADDRESS,order_deliveryAddress);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODNAME,order_prodName);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODSIZE,order_prodSize);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODSIZE,order_prodSize);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODUNIT,order_prodUnit);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODCONTAINER,order_prodContainer);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODCOUNT,order_prodCount);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODSTATUS,order_prodStatus);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODAVAILABILITYSTATUS,order_prodAvailabilityStatus);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODMRP,order_prodMrp);
+        orderHistoryAdapterToOrderDetailIntent.putStringArrayListExtra(auxiliary.ORDER_PRODSTOREPRICE,order_prodStorePrice);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_STORENAME,order_storeName);
+        orderHistoryAdapterToOrderDetailIntent.putExtra(auxiliary.ORDER_STOREAREA,order_storeArea);
+        this.mContext.startActivity(orderHistoryAdapterToOrderDetailIntent);
     }
 }

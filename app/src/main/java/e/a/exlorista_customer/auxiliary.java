@@ -157,6 +157,34 @@ class auxiliary{
     static int LANDMARK_MAXLENGTH=50;
     static int CUSTOMTAG_MAXLENGTH=30;
 
+    // orderHistoryAdapter -> orderDetail.java
+    static String ORDER_ID="orderId";
+    static String ORDER_STATUS="orderStatus";
+    static String ORDER_TOTAL="orderTotal";
+    static String ORDER_DELIVERYCHARGE="orderDeliveryCharge";
+    static String ORDER_GRANDTOTAL="orderGrandTotal";
+    static String ORDER_PAYMMETHOD="orderPaymentMethod";
+    static String ORDER_DATE="orderDate";
+    static String ORDER_TIME="orderTime";
+    static String ORDER_DELIVERYADDRESS="orderDeliveryAddress";
+    static String ORDER_PRODNAME="orderProdName";
+    static String ORDER_PRODSIZE="orderProdSize";
+    static String ORDER_PRODUNIT="orderProdUnit";
+    static String ORDER_PRODCONTAINER="orderProdContainer";
+    static String ORDER_PRODCOUNT="orderProdCount";
+    static String ORDER_PRODSTATUS="orderProdStatus";
+    static String ORDER_PRODAVAILABILITYSTATUS="orderProdAvailabilityStatus";
+    static String ORDER_PRODMRP="orderProdMrp";
+    static String ORDER_PRODSTOREPRICE="orderProdStorePrice";
+    static String ORDER_STORENAME="orderStoreName";
+    static String ORDER_STOREAREA="orderStoreArea";
+
+    // orderDetail.java
+    static String HEADING_ITEMPARTICULAR="particular";
+    static String HEADING_ITEMMRP="mrp";
+    static String HEADING_ITEMSTOREPRICE="store price";
+    static String HEADING_ITEMTOTAL="item total";
+
     // MainActivity.java -> loginOrSignup.java
     final static String NAVBUTTON_CLICKED="navButton_clicked";
     final static String NAV_LOGINB="nav_loginButton";
