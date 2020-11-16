@@ -1,5 +1,6 @@
 package e.a.exlorista_customer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +37,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderHistoryViewHolder> {
@@ -129,8 +133,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
 
-    private void customDateTimeFormat(String order_date, String order_time) {
-        int style = DateFormat.MEDIUM;
+    private void customDateTimeFormat( String order_time) {
+
         Date date ;
 
         try {
@@ -138,22 +142,32 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             date = df.parse(order_time);
             mOrderTime = new SimpleDateFormat("hh:mm a").format(date);
 
-            // get Date
-            java.util.Locale locale = java.util.Locale.US;
-            SimpleDateFormat format =new SimpleDateFormat("yyyy-mm-dd",locale);
-
-            date =format.parse(order_date);
-            mOrderDate  = new SimpleDateFormat("MMMM dd, yyyy").format(date);
-
-
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        orderDate.add(mOrderDate);
+
         orderTime.add(mOrderTime);
+
+    }
+    @SuppressLint("SimpleDateFormat")
+    public void customDate(String order_date){
+        java.util.Date date=null;
+        try {
+            // get Date
+            java.util.Locale locale = java.util.Locale.US;
+            SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-ddd",locale);
+
+            format.setTimeZone(TimeZone.getDefault());
+             date =format.parse(order_date);
+
+            format  = new SimpleDateFormat("MMMM dd, yyyy");
+            mOrderDate = format.format(date);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        orderDate.add(mOrderDate);
 
     }
 
@@ -273,7 +287,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                                 productMrp.get(i).add(jsonObject.getJSONArray("orderproddet_mrp").getString(j));
                                 productStoreprice.get(i).add(jsonObject.getJSONArray("orderproddet_storeprice").getString(j));
                             }
-                            customDateTimeFormat(jsonObject.getString("_order_date"), jsonObject.getString("_order_time"));
+                            customDateTimeFormat( jsonObject.getString("_order_time"));
+                            customDate(jsonObject.getString("_order_date"));
                         }
                         Log.i("order id arraylist size", Integer.toString(orderId.size()));
                     } else {

@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context=".orderDetail">
 
     <LinearLayout
         android:id="@+id/storeInfoOrderDetailLL"
         android:orientation="vertical"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/allside_border">
         <TextView
             android:id="@+id/storeNameOrderDetailTV"
@@ -27,10 +30,12 @@
     <LinearLayout
         android:id="@+id/itemsInfoOrderDetailLL"
         android:orientation="vertical"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/storeInfoOrderDetailLL"
         app:layout_constraintTop_toBottomOf="@id/storeInfoOrderDetailLL"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/allside_border">
         <TextView
             android:id="@+id/itemsInfoTextOrderDetailTV"
@@ -54,11 +59,28 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="Total"/>
-            <TextView
-                android:id="@+id/totalAmountOrderDetailTV"
+
+            <LinearLayout
+                android:gravity="center|left"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="0.0"
+                    android:src="@drawable/rupee"/>
+
+                <TextView
+                    android:id="@+id/totalAmountOrderDetailTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/discountOrderDetailLL"
@@ -71,11 +93,28 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="Discount"/>
-            <TextView
-                android:id="@+id/discountAmountOrderDetailTV"
+
+            <LinearLayout
+                android:gravity="center|left"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="0.0"
+                    android:src="@drawable/rupee"/>
+
+                <TextView
+                    android:id="@+id/discountAmountOrderDetailTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/deliveryOrderDetailLL"
@@ -88,11 +127,29 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="Delivery charge"/>
-            <TextView
-                android:id="@+id/deliveryAmountOrderDetailTV"
+
+            <LinearLayout
+                android:gravity="center|left"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="0.0"
+                    android:src="@drawable/rupee"/>
+
+                <TextView
+                    android:id="@+id/deliveryAmountOrderDetailTV"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/grandTotalOrderDetailLL"
@@ -105,21 +162,41 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="Grand total"/>
-            <TextView
-                android:id="@+id/grandTotalAmountOrderDetailTV"
+
+            <LinearLayout
+                android:gravity="center|left"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="13dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="0.0"
+                    android:src="@drawable/rupee"/>
+
+
+                <TextView
+                    android:id="@+id/grandTotalAmountOrderDetailTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/orderInfoOrderDetailLL"
         android:orientation="vertical"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/itemsInfoOrderDetailLL"
         app:layout_constraintTop_toBottomOf="@id/itemsInfoOrderDetailLL"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/allside_border">
         <TextView
             android:id="@+id/orderInfoTextOrderDetailTV"
@@ -166,10 +243,12 @@
     <LinearLayout
         android:id="@+id/moreInfoOrderDetailLL"
         android:orientation="vertical"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/orderInfoOrderDetailLL"
         app:layout_constraintTop_toBottomOf="@id/orderInfoOrderDetailLL"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/allside_border">
         <TextView
             android:id="@+id/moreInfoTextOrderDetailTV"
