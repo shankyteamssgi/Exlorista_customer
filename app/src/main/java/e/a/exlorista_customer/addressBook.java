@@ -114,6 +114,13 @@ public class addressBook extends AppCompatActivity {
         return true;
     }
 
+    public void reloadActivity(){
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
     private void setLocationRequest() {
         if (locationRequest == null) {
             Log.i("LOCATION", "locationRequest was null");
@@ -338,11 +345,13 @@ public class addressBook extends AppCompatActivity {
                         }
                     }, Looper.getMainLooper());
         } catch (NullPointerException npe){
+            progressDailog.stopLoading();
             npe.printStackTrace();
         } catch (SecurityException se){
             se.printStackTrace();
         } catch (Exception e){
             e.printStackTrace();
+            progressDailog.stopLoading();
         }
     }
 }

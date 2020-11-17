@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -69,7 +70,7 @@ public class addAddress extends AppCompatActivity {
 
     private EditText completeAddressET, addressLandmarkET, addOtherTagET;
     private Spinner stateSpinner, citySpinner, areaSpinner;
-    private Button saveAddressB;
+    private Button saveAddressB,saveAddressB1;
     private LinearLayout cityChoiceLL, stateChoiceLL, homeTagLL, officeTagLL;
     private TextView homeTagTextTV, officeTagTextTV;
     private ArrayList<HashMap<String,String>> stateData;
@@ -112,6 +113,7 @@ public class addAddress extends AppCompatActivity {
 
         mContext = this;
         saveAddressB = findViewById(R.id.saveAddressB);
+
         completeAddressET = findViewById(R.id.completeAddressET);
         addressLandmarkET = findViewById(R.id.addressLandmarkET);
         addOtherTagET = findViewById(R.id.addOtherTagET);
@@ -356,6 +358,9 @@ public class addAddress extends AppCompatActivity {
                     }
                     if(!sb.equals("")){
                         progressDialog.stopLoading();
+                        Intent intent = new Intent(getApplicationContext(),addressBook.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }                    //Log.i("sql (addAddress->fetchStateData)",sb.toString().trim());
                 } catch (MalformedURLException mue) {
                     progressDialog.stopLoading();
@@ -476,24 +481,27 @@ public class addAddress extends AppCompatActivity {
             } else if (address_tag.equals("") && selectedAddressTag.equals("")) {
                 addOtherTagET.requestFocus();
                 addOtherTagET.setError("Field can't be empty!");
+            } else if(!(selectedAddressTag == null&&address_complete.equals("")&&address_landmark.equals("")&&address_tag.equals("") && selectedAddressTag.equals(""))){
+
+                if (!address_areaId.equals("")) {
+                    // add address to database
+                    addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
+                            , customer_id
+                            , address_complete
+                            , address_landmark
+                            , add_latitude
+                            , add_longitude
+                            , address_areaId
+                            , address_tag.toString().trim());
+
+                    Toast.makeText(mContext, "Successfully inserted!", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Log.d("Area->","Area id is null.");
+                }
 
             }
-            if (!address_areaId.equals("")) {
-                // add address to database
-                addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
-                        , customer_id
-                        , address_complete
-                        , address_landmark
-                        , add_latitude
-                        , add_longitude
-                        , address_areaId
-                        , address_tag.toString().trim());
 
-                Toast.makeText(mContext, "Successfully inserted!", Toast.LENGTH_LONG).show();
-
-            } else {
-               Log.d("Area->","Area id is null.");
-            }
 
 
         } catch (Exception e) {

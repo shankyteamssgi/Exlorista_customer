@@ -110,7 +110,7 @@ public class CartProductsAdapter extends RecyclerView.Adapter<CartProductsAdapte
             public void onClick(View view) {
                 String this_prodcount_now=auxiliarycart.incrementProdCountByOneOGC(mContext,prod_id);
                 holder.mCartThisProdCountTV.setText(this_prodcount_now);
-                String thisItemTotalCost_String=String.format("Rs %s",Integer.toString(
+                String thisItemTotalCost_String=String.format(Integer.toString(
                         Integer.parseInt(this_prodcount_now)*Integer.parseInt(IHMK_vals[5].matches("\\d+")?IHMK_vals[5]:IHMK_vals[5].substring(3))
                 ));
                 holder.mCartThisItemTotalCostTV.setText(thisItemTotalCost_String);
@@ -132,7 +132,7 @@ public class CartProductsAdapter extends RecyclerView.Adapter<CartProductsAdapte
                             cartTotalAmount,cartDeliveryCharges);
                 } else{
                     holder.mCartThisProdCountTV.setText(this_prodcount_now);
-                    String thisItemTotalCost_String=String.format("Rs %s",Integer.toString(
+                    String thisItemTotalCost_String=String.format(Integer.toString(
                             Integer.parseInt(this_prodcount_now)*Integer.parseInt(IHMK_vals[5].matches("\\d+")?IHMK_vals[5]:IHMK_vals[5].substring(3))
                     ));
                     holder.mCartThisItemTotalCostTV.setText(thisItemTotalCost_String);

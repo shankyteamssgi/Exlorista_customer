@@ -151,7 +151,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
     @SuppressLint("SimpleDateFormat")
     public void customDate(String order_date){
-        java.util.Date date=null;
+       Date date=null;
         try {
             // get Date
             java.util.Locale locale = java.util.Locale.US;
