@@ -164,14 +164,7 @@ public class addAddress extends AppCompatActivity {
         saveAddressB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.startLoading();
-                Handler  handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        validateInput();
-                    }
-                }, 2000);
+                validateInput();
 
             }
         });
@@ -425,9 +418,9 @@ public class addAddress extends AppCompatActivity {
 
         try {
             StringBuilder error_message = new StringBuilder();
-            String customer_id = auxiliary.DUMMYVAL_CUSTID;
-            String address_complete = completeAddressET.getText().toString().trim();
-            String address_landmark = addressLandmarkET.getText().toString().trim();
+            final String customer_id = auxiliary.DUMMYVAL_CUSTID;
+            final String address_complete = completeAddressET.getText().toString().trim();
+            final String address_landmark = addressLandmarkET.getText().toString().trim();
             // geting key for selected area
             for(HashMap<String, String> map: areaData) {
                 boolean getKay=false;
@@ -441,7 +434,7 @@ public class addAddress extends AppCompatActivity {
                     break;
                 }
             }
-            StringBuilder address_tag = new StringBuilder();
+            final StringBuilder address_tag = new StringBuilder();
 
             if (selectedAddressTag == null) {
                 error_message.append("Select or add a tag");
@@ -478,26 +471,38 @@ public class addAddress extends AppCompatActivity {
             } else if (address_landmark.length() > auxiliary.LANDMARK_MAXLENGTH) {
                 addressLandmarkET.requestFocus();
                 addressLandmarkET.setError("Landmark length exceeded.");
-            } else if (address_tag.equals("") && selectedAddressTag.equals("")) {
+            } else if (address_tag.length()==0 ) {
                 addOtherTagET.requestFocus();
                 addOtherTagET.setError("Field can't be empty!");
-            } else if(!(selectedAddressTag == null&&address_complete.equals("")&&address_landmark.equals("")&&address_tag.equals("") && selectedAddressTag.equals(""))){
+            } else if(address_tag.length()!=0){
 
                 if (!address_areaId.equals("")) {
+                    progressDialog.startLoading();
                     // add address to database
-                    addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
-                            , customer_id
-                            , address_complete
-                            , address_landmark
-                            , add_latitude
-                            , add_longitude
-                            , address_areaId
-                            , address_tag.toString().trim());
+                    Handler  handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    Toast.makeText(mContext, "Successfully inserted!", Toast.LENGTH_LONG).show();
+                            addAddressToDb(auxiliary.SERVER_URL + "/addressBookManager.php"
+                                    , customer_id
+                                    , address_complete
+                                    , address_landmark
+                                    , add_latitude
+                                    , add_longitude
+                                    , address_areaId
+                                    , address_tag.toString().trim());
+                            Toast.makeText(mContext, "Successfully inserted!", Toast.LENGTH_LONG).show();
+
+                        }
+                    }, 2000);
+
+
+
 
                 } else {
-                    Log.d("Area->","Area id is null.");
+                    Toast.makeText(mContext, "Area is empty.", Toast.LENGTH_LONG).show();
+                    //Log.d("Area->","Area id is null.");
                 }
 
             }

@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -126,7 +127,7 @@ public class addressBook extends AppCompatActivity {
             Log.i("LOCATION", "locationRequest was null");
             locationRequest = new LocationRequest();
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval(10000);
+            locationRequest.setInterval(20000);
         } else {
             Log.i("LOCATION", "locationRequest was already set");
         }
@@ -289,14 +290,17 @@ public class addressBook extends AppCompatActivity {
     private void proceedToAddAddress() {
         try {
             progressDailog.startLoading();
+            Log.i("LOCATION", "Started");
             LocationServices.getFusedLocationProviderClient(addressBook.this)
                     .requestLocationUpdates(locationRequest, new LocationCallback() {
                         @Override
                         public void onLocationResult(LocationResult locationResult) {
                             super.onLocationResult(locationResult);
                             LocationServices.getFusedLocationProviderClient(addressBook.this).removeLocationUpdates(this);
+                            Log.i("LOCATION", "process");
                             if (locationResult != null) {
                                 if (locationResult.getLocations().size() > 0) {
+                                    Log.i("LOCATION", "inside if block");
                                     Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
                                     int latestLocationIndex = locationResult.getLocations().size() - 1;
                                     Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
@@ -312,8 +316,11 @@ public class addressBook extends AppCompatActivity {
                                     while(curr_lat==0.0 || curr_long==0.0){};
                                     try {
                                         addresses = geocoder.getFromLocation(curr_lat,curr_long,REQUEST_LOCATION_PERMISSION_CODE);
+                                        Log.i("LOCATION", "inside while block");
                                     } catch (IOException ioe) {
                                         ioe.printStackTrace();
+                                        progressDailog.stopLoading();
+                                        Toast.makeText(mContext, "Service not available", Toast.LENGTH_SHORT).show();
                                     }
                                     String curr_state,curr_city;
                                     if(addresses!=null){
