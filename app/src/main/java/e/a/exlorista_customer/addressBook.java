@@ -299,6 +299,7 @@ public class addressBook extends AppCompatActivity {
                             LocationServices.getFusedLocationProviderClient(addressBook.this).removeLocationUpdates(this);
                             Log.i("LOCATION", "process");
                             if (locationResult != null) {
+
                                 if (locationResult.getLocations().size() > 0) {
                                     Log.i("LOCATION", "inside if block");
                                     Intent addressBookToAddAddressIntent = new Intent(addressBook.this, addAddress.class);
@@ -341,14 +342,16 @@ public class addressBook extends AppCompatActivity {
                                             , Double.toString(curr_lat));
                                     addressBookToAddAddressIntent.putExtra(auxiliary.ADDR_LONG
                                             , Double.toString(curr_long));
-                                    progressDailog.stopLoading();
+
                                     startActivity(addressBookToAddAddressIntent);
+                                    progressDailog.stopLoading();
                                 } else {
                                     Log.i("LOCATION", "locationResult.getLocations().size() not greater than 0");
                                 }
                             } else {
                                 Log.i("LOCATION", "locationResult is null");
                             }
+
                         }
                     }, Looper.getMainLooper());
         } catch (NullPointerException npe){

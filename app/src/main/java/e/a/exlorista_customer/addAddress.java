@@ -348,12 +348,15 @@ public class addAddress extends AppCompatActivity {
                     String json;
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json);
+
                     }
                     if(!sb.equals("")){
-                        progressDialog.stopLoading();
+
                         Intent intent = new Intent(getApplicationContext(),addressBook.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        progressDialog.stopLoading();
                     }                    //Log.i("sql (addAddress->fetchStateData)",sb.toString().trim());
                 } catch (MalformedURLException mue) {
                     progressDialog.stopLoading();
@@ -465,10 +468,7 @@ public class addAddress extends AppCompatActivity {
                 completeAddressET.requestFocus();
                 completeAddressET.setError("Address length exceeded.");
 
-            } else if (address_landmark.equals("")) {
-                addressLandmarkET.requestFocus();
-                addressLandmarkET.setError("Field can't be empty!");
-            } else if (address_landmark.length() > auxiliary.LANDMARK_MAXLENGTH) {
+            }  else if (address_landmark.length() > auxiliary.LANDMARK_MAXLENGTH) {
                 addressLandmarkET.requestFocus();
                 addressLandmarkET.setError("Landmark length exceeded.");
             } else if (address_tag.length()==0 ) {
