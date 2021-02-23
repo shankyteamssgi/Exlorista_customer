@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".payment">
+    tools:context=".deliveryType">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,23 +17,97 @@
             android:layout_height="wrap_content">
 
             <RadioGroup
-                android:id="@+id/choosePaymentMethodRG"
-                android:orientation="vertical"
+                android:id="@+id/deliveryTypesRG"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="20dp">
-
+                <RadioButton
+                    android:id="@+id/deliveryInstantRB"
+                    android:tag="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instant delivery" />
+                <RadioButton
+                    android:id="@+id/deliverySlottedRB"
+                    android:tag="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Slotted delivery" />
+                <RadioButton
+                    android:id="@+id/deliveryScheduledRB"
+                    android:tag="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scheduled delivery" />
+                <RadioButton
+                    android:id="@+id/deliveryTakeawayRB"
+                    android:tag="4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Takeaway" />
             </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/chooseSlotOrDateTimeLL"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryTypesRG"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/chooseSlotLL"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioGroup
+                        android:id="@+id/deliverySlotsRG"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </RadioGroup>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/chooseDateTimeLL"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/chooseDateTimeTextTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Choose date and time"/>
+                    <LinearLayout
+                        android:id="@+id/chooseDateTimeInnerLL"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/selectTimeTV"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/selectDateTV"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:focusable="false"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/cartSummary_paymentNSV"
+        android:id="@+id/cartSummary_deliveryTypeNSV"
         android:layout_width="match_parent"
         android:layout_height="65sp"
         android:background="@color/colorPrimaryDark"
@@ -50,7 +123,7 @@
             android:padding="5dp">
 
             <Button
-                android:id="@+id/cartProceed_paymentB"
+                android:id="@+id/cartProceed_deliveryTypeB"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:background="@color/whiteColor"
@@ -60,11 +133,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.90"
-                app:layout_constraintStart_toEndOf="@id/cartSummary_paymentLL"
+                app:layout_constraintStart_toEndOf="@id/cartSummary_deliveryTypeLL"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/cartSummary_paymentLL"
+                android:id="@+id/cartSummary_deliveryTypeLL"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
@@ -92,7 +165,7 @@
                         android:src="@drawable/ic_rupeewhitee" />
 
                     <TextView
-                        android:id="@+id/cartGrandTotalAmount_paymentTV"
+                        android:id="@+id/cartGrandTotalAmount_deliveryTypeTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -103,7 +176,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/cartItemCount_paymentTV"
+                    android:id="@+id/cartItemCount_deliveryTypeTV"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginLeft="3.5dp"

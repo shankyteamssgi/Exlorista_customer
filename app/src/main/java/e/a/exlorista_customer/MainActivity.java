@@ -64,11 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Timer timer;
     private ActionBarDrawerToggle toggle;
 
-    private auxiliary aux;
     private Context mContext;
 
     ImageView cartIV;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     private final int SECONDS_UNTIL_SERVER_UNAVAILABILITY=2;
     private final int SLIDER_DELAY=0;
@@ -94,64 +93,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView=findViewById(R.id.nav_view);
         attachOnClickListenersToUserAccountManagementViews();
         currentPage=0;
-        aux=new auxiliary();
-        aux.setServerAvailability(-1);
+        //aux.setServerAvailability(-1);
 
         try{
-            if(!aux.isInternetAvailable()){
+            if(!auxiliary.isInternetAvailable()){
                 // Internet not available. However, if there's internet then data plan must be inactive
                 LaunchNoInternetActivity(0);
             }
             else{
-                // Internet available with active data plan
-                Log.i("MainActivity","internet available, checking server availability");
-                aux.checkServerAvailability(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php",
+                int server_availability=auxiliary.checkServerAvailability(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php",
                         SECONDS_UNTIL_SERVER_UNAVAILABILITY);
-                Log.i("MainActivity","checking done, inside while loop");
-                while(true){
-                    int serverAvailability=aux.getServerAvailability();
-                    if(serverAvailability==1){
-                        // server available
+                if(server_availability==1){
+                    // server available
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getHamburgerJSON(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php");
+                            Log.i("MainActivity","unoptimized 1 begins");
+                            loadImageSlider(SLIDER_PERIOD,SLIDER_DELAY);
+                            Log.i("MainActivity","unoptimized 1 ends, unoptimized 2 begins");
+                            loadStoreDetails();
+                            Log.i("MainActivity","unoptimized 2 ends");
+                            progressDialog.hide();
+                            internalLayoutRL.setVisibility(View.VISIBLE);
+                        }
+                    },0);
+                    //stop dialog
 
+                    //go to cartActivity
+                    cartIV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getApplicationContext(),cart.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
 
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                getHamburgerJSON(auxiliary.SERVER_URL+"/fetchHamburgerMenu.php");
-                                loadImageSlider(SLIDER_PERIOD,SLIDER_DELAY);
-                                loadStoreDetails();
-                                progressDialog.hide();
-                                internalLayoutRL.setVisibility(View.VISIBLE);
-                            }
-                        },8000);
-
-                        //stop dialog
-
-                        //go to cartActivity
-                        cartIV.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(getApplicationContext(),cart.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-
-                            }
-                        });
-
-                        //fetchSetImage(auxiliary.SERVER_URL+"/images/ads/ad1.jpg");
-                        //getGalleryImagesPathJSON(auxiliary.SERVER_URL+"/fetchGalleryImages.php");
-                        break;
-                    }
-                    else if(serverAvailability==0){
-                        // server unavailable
-                        LaunchNoInternetActivity(1);
-                        break;
-                    }
+                        }
+                    });
+                } else{
+                    LaunchNoInternetActivity(1);
                 }
-                Log.i("MainActivity","out of while loop");
-                Log.i("MainActivity server url", auxiliary.SERVER_URL);
             }
         }
         catch (InterruptedException ie){
@@ -180,6 +162,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Navigation Drawer Close
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i("MainActivity","Inside onStop");
+        super.onStop();
+        StoreDetailsAdapter.progressDialog.hide();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("Inside onResume","Code executed");
+
+        manageUserDetailInNavbar();
+        handleBottomSheetBehavior();
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.i("MainActivity","Inside onRestart");
+        super.onRestart();
+    }
+
     //Navigtion Drawer
 
     private void setUpToolbar() {
@@ -195,15 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     //Navigation Drawer Close
-
-    @Override
-    protected void onResume() {
-        Log.i("Inside onResume","Code executed");
-
-        manageUserDetailInNavbar();
-        handleBottomSheetBehavior();
-        super.onResume();
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

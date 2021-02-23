@@ -11,7 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".orderDetail"></activity>
+        <activity android:name=".trackOrder"></activity>
+        <activity android:name=".chooseAddress" />
+        <activity android:name=".deliveryType" />
+        <activity android:name=".setLocation" />
+        <activity android:name=".orderDetail" />
         <activity android:name=".loginOrSignup" /> <!-- Copied and pasted from developers.facebook.com while setting facebook login -->
         <!-- Facebook login begins -->
         <activity

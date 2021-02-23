@@ -56,8 +56,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blackColor"
             android:fontFamily="@font/comfortaa_bold"
-            android:text="Order has been placed"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout

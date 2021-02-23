@@ -40,11 +40,9 @@ public class ImageSliderAdapter extends PagerAdapter {
     private Context mContext;
     private ArrayList<Bitmap> mBitmaps;
     private LayoutInflater layoutInflater;
-    private auxiliary aux;
 
     ImageSliderAdapter(Context context){
         this.mContext=context;
-        this.aux=new auxiliary();
         this.mBitmaps=new ArrayList<>();
         this.getGalleryImages(auxiliary.SERVER_URL+"/fetchGalleryImages.php");
     }
@@ -99,7 +97,7 @@ public class ImageSliderAdapter extends PagerAdapter {
                     //con.setRequestProperty("Accept-Charset", "UTF-8");
                     con.connect();
                     DataOutputStream dos=new DataOutputStream(con.getOutputStream());
-                    dos.writeBytes(aux.postParamsToString(new HashMap<String, String>(){
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
                         {
                             put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
                         }
@@ -160,7 +158,6 @@ public class ImageSliderAdapter extends PagerAdapter {
             //Log.i("execution","ExecutionException occurred");
             //ee.printStackTrace();
         }
-
     }
 
 }

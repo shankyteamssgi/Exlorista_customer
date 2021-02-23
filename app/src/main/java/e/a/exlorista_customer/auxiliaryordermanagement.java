@@ -1,5 +1,6 @@
 package e.a.exlorista_customer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.webkit.WebView;
 
@@ -83,6 +84,34 @@ class auxiliaryordermanagement {
         } catch (ExecutionException ignored) {
         }
         return placeOrder.getSql();
+    }
+
+    static void placeOrderWrapper(Context context,String payment_id){
+        ArrayList<String> prodIdsInCart=auxiliarycart.prodIdsInCart(context);
+        ArrayList<String> prodCountsInCart=new ArrayList<String>();
+        ArrayList<String> prodMrpsInCart=new ArrayList<String>();
+        ArrayList<String> prodStorepricesInCart=new ArrayList<String>();
+        String storeId=auxiliarycart.getStoreIdInCart(context);
+        for(String i : prodIdsInCart){
+            prodCountsInCart.add(auxiliarycart.thisProdCountInCartOGC(context,i,storeId));
+            prodMrpsInCart.add(auxiliarycart.getCartProdInternalHashMapValueOGC(context,i,auxiliarycart.IHMKEY_PRODMRP));
+            prodStorepricesInCart.add(auxiliarycart.getCartProdInternalHashMapValueOGC(context,i,auxiliarycart.IHMKEY_PRODSTOREPRICE));
+        }
+        int cart_total=auxiliarycart.getCartTotalAmount(context,prodIdsInCart);
+        int cart_deliveryCharges=auxiliarycart.getCartDeliveryCharges(cart_total);
+        int cart_grandTotal=cart_total+cart_deliveryCharges;
+        auxiliaryordermanagement.placeOrder(auxiliary.SERVER_URL+"/orderManagement.php"
+                ,auxiliary.DUMMYVAL_CUSTID
+                ,auxiliarycart.getStoreIdInCartOGC(context)
+                ,auxiliary.arrayListToStr(prodIdsInCart,"_")
+                ,auxiliary.arrayListToStr(prodCountsInCart,"_")
+                ,auxiliary.arrayListToStr(prodMrpsInCart,"_")
+                ,auxiliary.arrayListToStr(prodStorepricesInCart,"_")
+                ,Integer.toString(cart_total)
+                ,Integer.toString(cart_deliveryCharges)
+                ,Integer.toString(cart_grandTotal)
+                ,auxiliary.DUMMYVAL_CUSTADDRID
+                ,payment_id);
     }
 
 }

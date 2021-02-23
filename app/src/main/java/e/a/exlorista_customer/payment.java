@@ -2,13 +2,19 @@ package e.a.exlorista_customer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookException;
@@ -25,92 +31,207 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class payment extends AppCompatActivity {
 
+    RadioGroup choosePaymentMethodRG;
+    TextView cartItemCount_paymentTV,cartGrandTotalAmount_paymentTV;
+    Button cartProceed_paymentB;
+
+    ArrayList<String[]> paymMetIdAndName;
+    ArrayList<RadioButton> paymMethods;
+    String selectedPaymMetId;
+    boolean paymentIsSuccessful;
+    String paymentId;
+
     Context mContext;
-    GoogleSignInClient mGoogleSignInClient;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
+
+    Bundle extras;
+    deliveryType.DELIVERYTYPE deliveryType;
+    String deliveryTypeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+
         mContext=this;
-        mAuth=FirebaseAuth.getInstance();
-        user=mAuth.getCurrentUser();
-        //FacebookSdk.sdkInitialize(getApplicationContext());
-        try{
-            HashMap<String,String> userDetailHM=auxiliaryuseraccountmanager.getUserDetailsFromSP(mContext);
-            Log.i("SIGNED IN","email: "+user.getEmail());
-            Log.i("SIGNED IN","display name: "+user.getDisplayName());
-            Log.i("SIGNED IN","phone number: "+user.getPhoneNumber());
-            //Log.i("SIGNED IN", "FB id: "+Profile.getCurrentProfile().getId());
-            Log.i("INFO FROM SP","email: "+userDetailHM.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL));
-            Log.i("INFO FROM SP","display name: "+userDetailHM.get(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME));
-            Log.i("INFO FROM SP","phone number: "+userDetailHM.get(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER));
-        } catch (NullPointerException npe){
-            Log.i("SIGNED IN","NPE occurred");
-            npe.printStackTrace();
-        } catch (Exception e){
-            Log.i("SIGNED IN","Exception occurred");
-            e.printStackTrace();
+
+        extras=getIntent().getExtras();
+        if(extras!=null){
+            deliveryType=(deliveryType.DELIVERYTYPE) extras.getSerializable(auxiliary.DELIVERYTYPE);
+            deliveryTypeId=extras.getString(auxiliary.DELIVERYTYPEID);
         }
-        Button signOutB;
-        signOutB=findViewById(R.id.signOutB);
-        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient= GoogleSignIn.getClient(mContext,gso);
-        signOutB.setOnClickListener(new View.OnClickListener() {
+
+        paymentIsSuccessful=false;
+
+        choosePaymentMethodRG=findViewById(R.id.choosePaymentMethodRG);
+        cartItemCount_paymentTV=findViewById(R.id.cartItemCount_paymentTV);
+        cartGrandTotalAmount_paymentTV=findViewById(R.id.cartGrandTotalAmount_paymentTV);
+        cartProceed_paymentB=findViewById(R.id.cartProceed_paymentB);
+
+        assignCartValuesInBottomSheet();
+
+        populateEligiblePaymentMethods();
+
+        cartProceed_paymentB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mAuth.signOut();
-                /*
-                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        finish();
-                    }
-                });*/
-                //mGoogleSignInClient.signOut();
-                /*
-                if(AccessToken.getCurrentAccessToken()!=null){
-                    AccessToken accessToken=AccessToken.getCurrentAccessToken();
-                    new GraphRequest(accessToken
-                            ,"/"+accessToken.getUserId()+"/permissions/"
-                            ,null
-                            ,HttpMethod.DELETE
-                            ,new GraphRequest.Callback() {
-                        @Override
-                        public void onCompleted(GraphResponse graphResponse) {
-                        }
-                    }).executeAsync();
-                }*/
-                //LoginManager.getInstance().logOut();
-                //finish();
-                //clearUserDetailFromNavbar();
-                auxiliaryuseraccountmanager.signOutOGC(mContext, getString(R.string.default_web_client_id),true);
+                if(paymentIsSuccessful && validateInput()){
+                    auxiliaryordermanagement.placeOrderWrapper(mContext,paymentId);
+                    updateFcmToken();
+                    auxiliarycart.clearCart(mContext);
+                    proceedToLiveOrderStatus();
+                }
             }
         });
     }
 
-    private void clearUserDetailFromNavbar(){
-        LinearLayout navBarUserDetailsLL;
-        Button navLoginB,navSignupB,navSignoutB;
+    @Override
+    public void onBackPressed() {
+        // IMPLEMENTATION INCOMPLETE
+        // Implementation will depend on the flow of this activity
+        if(!paymentIsSuccessful){
+            auxiliarycart.clearCart(mContext);
+        }
+    }
 
-        navBarUserDetailsLL=findViewById(R.id.navBarUserDetailsLL);
-        navLoginB=findViewById(R.id.navLoginB);
-        navSignupB=findViewById(R.id.navSignupB);
-        navSignoutB=findViewById(R.id.navSignoutB);
-        navBarUserDetailsLL.setVisibility(View.GONE);
-        navSignoutB.setVisibility(View.GONE);
-        navLoginB.setVisibility(View.VISIBLE);
-        navSignupB.setVisibility(View.VISIBLE);
+    private void assignCartValuesInBottomSheet(){
+        ArrayList<String> prodIdsInCart=auxiliarycart.prodIdsInCartOGC(mContext);
+        int cartTotalAmount=auxiliarycart.getCartTotalAmount(mContext,prodIdsInCart);
+        int cartDeliveryCharges=auxiliarycart.getCartDeliveryCharges(cartTotalAmount);
+        int cartGrandTotalAmount=cartTotalAmount+cartDeliveryCharges;
+        cartItemCount_paymentTV.setText(Integer.toString(prodIdsInCart.size()));
+        cartGrandTotalAmount_paymentTV.setText(Integer.toString(cartGrandTotalAmount));
+    }
+
+    private void populateEligiblePaymentMethods(){
+        paymMetIdAndName=getPaymMetIdAndNameFromDb(auxiliary.SERVER_URL+"/fetchPaymentData.php",deliveryTypeId);
+        for(int i=0;i<paymMetIdAndName.size();i++){
+            RadioButton paymMetRB=new RadioButton(mContext);
+            paymMetRB.setText(paymMetIdAndName.get(i)[1]);
+            paymMetRB.setId(ViewCompat.generateViewId());
+            choosePaymentMethodRG.addView(paymMetRB);
+        }
+    }
+
+    private void assignPaymentResults(){
+        // INCOMPLETE
+        // Implementation of this method is dependent on implementation of payment gateway.
+        // Here, assign relevant values to paymentIsSuccessful and paymentId
+    }
+    
+    private void updateFcmToken(){
+        try{
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                //Log.i("FCM", "getInstanceId failed", task.getException());
+                                return;
+                            }
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            Log.i("FCM","token -> "+token);
+                            String sql=auxiliaryfcmmanager.sendTokenToServer(auxiliary.SERVER_URL+"/fcmTokenManagement.php"
+                                    ,auxiliary.DUMMYVAL_CUSTID
+                                    ,token);
+                            Log.i("FCM","sql -> "+sql);
+                        }
+                    });
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private boolean validateInput(){
+        boolean input_validation=true;
+        if(choosePaymentMethodRG.getCheckedRadioButtonId()==-1){
+            input_validation=false;
+            Toast.makeText(mContext,"Payment method not selected",Toast.LENGTH_LONG).show();
+        } else{
+            for(int i=0;i<paymMethods.size();i++){
+                if(choosePaymentMethodRG.getCheckedRadioButtonId()==paymMethods.get(i).getId()){
+                    selectedPaymMetId=paymMetIdAndName.get(i)[0];
+                    break;
+                }
+            }
+        }
+        return input_validation;
+    }
+
+    private void proceedToLiveOrderStatus(){
+        Intent paymentToLiveOrderStatusIntent=new Intent(payment.this,liveOrderStatus.class);
+        startActivity(paymentToLiveOrderStatusIntent);
+    }
+
+    private ArrayList<String[]> getPaymMetIdAndNameFromDb(final String urlWebService,final String deliverytype_id){
+        class GetPaymMetIdAndNameFromDb extends AsyncTask<Void,Void,Void>{
+
+            private ArrayList<String[]> paym_id_and_name=new ArrayList<String[]>();
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try{
+                    URL url = new URL(urlWebService);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setDoOutput(true);
+                    con.setRequestMethod("POST");
+                    con.connect();
+                    DataOutputStream dos = new DataOutputStream(con.getOutputStream());
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>() {
+                        {
+                            put(auxiliary.PPK_INITIAL_CHECK, auxiliary.PPV_INITIAL_CHECK);
+                            put(auxiliary.PPK_DELIVERYTYPEID,deliverytype_id);
+                        }
+                    }));
+                    dos.flush();
+                    dos.close();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json);
+                    }
+                    JSONArray jsonArray=new JSONArray(sb.toString().trim());
+                    for(int i=0;i<jsonArray.length();i++){
+                        JSONArray id_and_name=jsonArray.getJSONArray(i);
+                        paym_id_and_name.add(new String[]{id_and_name.getString(0),id_and_name.getString(1)});
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                return null;
+            }
+            private ArrayList<String[]> getPaymMetIdAndName(){
+                return paym_id_and_name;
+            }
+        }
+        GetPaymMetIdAndNameFromDb getPaymMetIdAndNameFromDb=new GetPaymMetIdAndNameFromDb();
+        try {
+            getPaymMetIdAndNameFromDb.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return getPaymMetIdAndNameFromDb.getPaymMetIdAndName();
     }
 
 }

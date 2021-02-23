@@ -50,8 +50,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
     private ArrayList<String[]> storeTiming;
     private ArrayList<String> storeImgPath;
     private ArrayList<Bitmap> storeImg;
-    private auxiliary aux;
-    ProgressDialog progressDialog;
+    static ProgressDialog progressDialog;
 
 
 
@@ -83,7 +82,6 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         this.storeTiming=new ArrayList<>();
         this.storeImgPath=new ArrayList<>();
         this.storeImg=new ArrayList<>();
-        this.aux=new auxiliary();
         this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
         //initilize the dialog
         progressDialog = new ProgressDialog((Activity) mContext);
@@ -120,10 +118,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                                 storeImgPath.get(holder.getAdapterPosition()));
 
                     }
-                }, 5000);
-
-
-
+                }, 0);
 
             }
         });
@@ -148,7 +143,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                     con.setRequestMethod("POST");
                     con.connect();
                     DataOutputStream dos=new DataOutputStream(con.getOutputStream());
-                    dos.writeBytes(aux.postParamsToString(new HashMap<String, String>(){
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>(){
                         {
                             put(auxiliary.PPK_INITIAL_CHECK,auxiliary.PPV_INITIAL_CHECK);
                         }
@@ -235,14 +230,6 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
 
         this.mContext.startActivity(intent);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.hide();
-            }
-        },5000);
-
     }
 
     private String[] getStoreTimingStringArray(JSONObject obj){

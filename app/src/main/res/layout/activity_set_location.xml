@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".setLocation">
+
+    <ImageView
+        android:id="@+id/setLocationIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/setLocationMsgTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/setLocationIV"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:textSize="18sp"
+        android:text="Set location\n to view stores in your city"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/setLocationMsgTV"
+        android:layout_marginTop="15dp">
+        <Button
+            android:id="@+id/useCurrentLocationB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Use current location"/>
+        <Button
+            android:id="@+id/setLocationManuallyB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Set your location manually"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

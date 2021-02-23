@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by a on 12/26/2019.
@@ -85,6 +86,7 @@ class auxiliary{
     *  Therefore, until that method is implemented, this DUMMYVAL_CUSTID will be used.*/
     static String DUMMYKEY_CUSTID="cust_id";
     static String DUMMYVAL_CUSTID="1";
+    static String DUMMYVAL_CUSTADDRID="1";
 
     //intent (signinorup.java -> phoneVerification.java)
     static String PHONE_NO="phoneNo";
@@ -185,6 +187,13 @@ class auxiliary{
     static String HEADING_ITEMSTOREPRICE="store price";
     static String HEADING_ITEMTOTAL="item total";
 
+    // deliveryType.java
+    final static String DELIVERYTYPE="deliverytype";
+    final static String DELIVERYTYPEID="deliverytype_id";
+    final static String DELIVERYSLOTID="delivery_slotid";
+    final static String DELIVERYDATETIME="delivery_datetime";
+    final static String PPK_DELIVERYTYPEID="deliveryTypeId";
+
     // MainActivity.java -> loginOrSignup.java
     final static String NAVBUTTON_CLICKED="navButton_clicked";
     final static String NAV_LOGINB="nav_loginButton";
@@ -203,29 +212,18 @@ class auxiliary{
     static String PPK_INITIAL_CHECK_FAIL="PPK_INITIAL_CHECK failed";
     static String PPV_INITIAL_CHECK="EXPLORISTA";
 
-    private int serverAvailability;
     private Context mContext;
 
-    boolean isInternetAvailable() throws InterruptedException, IOException {
+    static boolean isInternetAvailable() throws InterruptedException, IOException {
         String command="ping -c 1 google.com";
         return Runtime.getRuntime().exec(command).waitFor()==0;
     }
 
-    void setServerAvailability(int serverAvailability){
-        this.serverAvailability=serverAvailability;
-    }
-
-    int getServerAvailability(){
-        return this.serverAvailability;
-    }
-
-    void setDefaultServerAvailability(){
-        this.serverAvailability=-1;
-    }
-
-    void checkServerAvailability(final String urlWebService, final int seconds_Until_Server_Unavailability){
+    static int checkServerAvailability(final String urlWebService, final int seconds_Until_Server_Unavailability){
 
         class CheckServerAvailability extends AsyncTask<Void, Void, Void> {
+
+            int server_availability;
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -239,27 +237,39 @@ class auxiliary{
                     int response_code=con.getResponseCode();
                     //Log.i("control","response_code is "+Integer.toString(response_code));
                     if(response_code==200){
-                        auxiliary.this.setServerAvailability(1);
+                        //auxiliary.this.setServerAvailability(1);
+                        server_availability=1;
                         //Log.i("server available here","true");
                     }
                 } catch (MalformedURLException mue){
                     //Log.i("exception","MalformedURLException occurred in CheckServerAvailability");
-                    auxiliary.this.setServerAvailability(0);
+                    //auxiliary.this.setServerAvailability(0);
+                    server_availability=0;
                 } catch (SocketTimeoutException ste){
                     //Log.i("exception","SocketTimeOutException occurred in CheckServerAvailability");
-                    auxiliary.this.setServerAvailability(0);
+                    //auxiliary.this.setServerAvailability(0);
+                    server_availability=0;
                 } catch (IOException io){
                     //Log.i("exception","IOException occurred in CheckServerAvailability");
-                    auxiliary.this.setServerAvailability(0);
+                    //auxiliary.this.setServerAvailability(0);
+                    server_availability=0;
                 } catch (Exception e){
                     //Log.i("exception","Exception occurred in CheckServerAvailability");
-                    auxiliary.this.setServerAvailability(0);
+                    //auxiliary.this.setServerAvailability(0);
+                    server_availability=0;
                 }
                 return null;
             }
         }
         CheckServerAvailability csa=new CheckServerAvailability();
-        csa.execute();
+        try {
+            csa.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return csa.server_availability;
     }
 
     static String postParamsToString(HashMap<String,String> params){

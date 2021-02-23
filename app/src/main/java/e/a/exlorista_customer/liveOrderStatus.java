@@ -21,14 +21,7 @@ public class liveOrderStatus extends AppCompatActivity {
     private Bundle extras;
     private String storeId;
     private String custId;
-    private ArrayList<String> prodIdsInCart;
-    private ArrayList<String> prodCountsInCart;
-    private ArrayList<String> prodMrpsInCart;
-    private ArrayList<String> prodStorepricesInCart;
-
-    private String cartTotal;
-    private String cartDeliveryCharge;
-    private String cartGrandTotal;
+    private String orderId;
 
     Context mContext;
 
@@ -51,57 +44,6 @@ public class liveOrderStatus extends AppCompatActivity {
         if(extras!=null){
             storeId=extras.getString(auxiliary.STORE_ID);
             custId=extras.getString(auxiliary.DUMMYKEY_CUSTID);
-            prodIdsInCart=extras.getStringArrayList(auxiliary.PRODIDS_INCART);
-            cartTotal=extras.getString(auxiliary.CART_TOTAL);
-            cartDeliveryCharge=extras.getString(auxiliary.CART_DELIVERYCHARGE);
-            cartGrandTotal=extras.getString(auxiliary.CART_GRANDTOTAL);
-            prodCountsInCart=new ArrayList<String>();
-            prodMrpsInCart=new ArrayList<String>();
-            prodStorepricesInCart=new ArrayList<String>();
-            for(String i : prodIdsInCart){
-                prodCountsInCart.add(auxiliarycart.thisProdCountInCartOGC(mContext,i,storeId));
-                prodMrpsInCart.add(auxiliarycart.getCartProdInternalHashMapValueOGC(mContext,i,auxiliarycart.IHMKEY_PRODMRP));
-                prodStorepricesInCart.add(auxiliarycart.getCartProdInternalHashMapValueOGC(mContext,i,auxiliarycart.IHMKEY_PRODSTOREPRICE));
-            }
-        }
-        try{
-            String sql=auxiliaryordermanagement.placeOrder(
-                    auxiliary.SERVER_URL+"/orderManagement.php"
-                    ,custId
-                    ,storeId
-                    ,auxiliary.arrayListToStr(prodIdsInCart,"_")
-                    ,auxiliary.arrayListToStr(prodCountsInCart,"_")
-                    ,auxiliary.arrayListToStr(prodMrpsInCart,"_")
-                    ,auxiliary.arrayListToStr(prodStorepricesInCart,"_")
-                    ,cartTotal
-                    ,cartDeliveryCharge
-                    ,cartGrandTotal
-                    ,CUSTADDR_ID
-                    ,PAYM_ID);
-            Log.i("LOS","sql -> "+sql);
-            FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful()) {
-                                //Log.i("FCM", "getInstanceId failed", task.getException());
-                                return;
-                            }
-                            // Get new Instance ID token
-                            String token = task.getResult().getToken();
-                            Log.i("FCM","token -> "+token);
-                            String sql=auxiliaryfcmmanager.sendTokenToServer(auxiliary.SERVER_URL+"/fcmTokenManagement.php"
-                                    ,auxiliary.DUMMYVAL_CUSTID
-                                    ,token);
-                            Log.i("FCM","sql -> "+sql);
-                        }
-                    });
-        } catch (NullPointerException npe){
-            Log.i("LOS","npe occurred");
-            npe.printStackTrace();
-        } catch (Exception e){
-            Log.i("LOS","exception occurred");
-            e.printStackTrace();
         }
     }
 
