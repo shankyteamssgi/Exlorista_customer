@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whiteColor"
     android:fitsSystemWindows="true"
     tools:context="e.a.exlorista_customer.MainActivity">
 
@@ -87,7 +88,7 @@
                         android:id="@+id/nearByStoresTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="30dp"
                         android:text="Nearby Stores"
                         android:textColor="@color/blackColor"
                         android:fontFamily="@font/comfortaa_bold"
@@ -98,11 +99,21 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"/>
 
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/nearme"
+                        app:layout_constraintBottom_toBottomOf="@+id/nearByStoresTV"
+                        app:layout_constraintStart_toEndOf="@+id/nearByStoresTV"
+                        app:layout_constraintTop_toTopOf="@+id/nearByStoresTV" />
+
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/storeRV"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="30dp"
                         app:layout_constraintTop_toBottomOf="@+id/nearByStoresTV" />
 
                     <TextView

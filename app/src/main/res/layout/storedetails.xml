@@ -5,65 +5,69 @@
     android:layout_height="wrap_content"
     android:background="@color/whiteColor"
     app:cardElevation="1dp"
-    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="10dp"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/storeDetailsCL">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/storeDetailsCL">
 
-            <ImageView
-                android:id="@+id/storeImgIV"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:padding="4sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/storeImgIV"
+            android:layout_width="150dp"
+            android:layout_height="130dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/storeNameTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/comfortaa_bold"
-                android:textColor="@color/blackColor"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/storeImgIV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/storeNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/blackColor"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/storeImgIV"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/storeAddressTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/comfortaa_bold"
-                android:textColor="@color/fadeBlack"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="@+id/storeNameTV"
-                app:layout_constraintStart_toStartOf="@+id/storeNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/storeNameTV" />
 
-            <TextView
-                android:id="@+id/storeTimingTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:fontFamily="@font/comfortaa_bold"
-                android:textColor="@color/fadeBlack"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/storeAddressTV"
-                app:layout_constraintStart_toStartOf="@+id/storeAddressTV"
-                app:layout_constraintTop_toBottomOf="@+id/storeAddressTV" />
+        <TextView
+            android:id="@+id/storeAddressTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/fadeBlack"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/storeNameTV"
+            app:layout_constraintStart_toStartOf="@+id/storeNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/storeNameTV" />
 
-        </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/storeTimingTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:textColor="@color/fadeBlack"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/storeAddressTV"
+            app:layout_constraintStart_toStartOf="@+id/storeAddressTV"
+            app:layout_constraintTop_toBottomOf="@+id/storeAddressTV" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
 
     </android.support.v7.widget.CardView>
 

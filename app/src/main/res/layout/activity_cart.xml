@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,6 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="e.a.exlorista_customer.cart">
+
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -249,7 +249,7 @@
         android:background="@color/colorPrimaryDark"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         android:visibility="visible">
-        
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

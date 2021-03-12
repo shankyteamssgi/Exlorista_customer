@@ -84,7 +84,7 @@
             android:id="@+id/cartAddOneMoreProdB"
             android:layout_width="80dp"
             android:layout_height="25dp"
-            android:background="@drawable/btn_increase"
+            android:background="@drawable/btn_search_border"
             android:layout_gravity="top"
             android:textStyle="bold"
             android:text="+" />
@@ -95,14 +95,17 @@
             android:layout_weight="0.28"
             android:fontFamily="@font/comfortaa_bold"
             android:paddingVertical="8dp"
+            android:padding="10dp"
+            android:background="@color/greenColor"
             android:layout_gravity="center"
+            android:textColor="@color/whiteColor"
             android:gravity="center"
             android:text="1"/>
         <Button
             android:id="@+id/cartRemoveOneProdB"
             android:layout_width="80dp"
             android:layout_height="25dp"
-            android:background="@drawable/btn_decrease"
+            android:background="@drawable/btn_search_border"
             android:textStyle="bold"
             android:text="-"/>
         <TextView

@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteColor"
     tools:context=".loginOrSignup">
 
 
     <ImageView
-        android:id="@+id/StayatHomeImage"
-       android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/login_layout"
-        android:scaleType="fitXY"/>
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/login_pageupper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/StayatHomeImage">
+        android:layout_height="0dp"
+        android:background="@drawable/background_loginpage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".85"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1">
+
+
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signInGoogleNewwSIB"
@@ -32,6 +43,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
+
         <LinearLayout
             android:id="@+id/loginOrSignupHeadingLL"
             android:layout_width="match_parent"
@@ -40,11 +52,12 @@
             android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
             android:orientation="horizontal"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="31dp">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/loginTV"
@@ -111,7 +124,7 @@
                     android:background="@drawable/bottom_border"
                     android:padding="10dp"
                     android:textCursorDrawable="@null"
-                   />
+                    />
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -205,7 +218,21 @@
         </LinearLayout>
 
 
+
     </android.support.constraint.ConstraintLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa_bold"
+        android:text="Explorista"
+        android:textColor="@color/whiteColor"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintVertical_bias=".3"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
