@@ -1,6 +1,13 @@
 package e.a.exlorista_customer;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -65,6 +72,32 @@ class auxiliaryfcmmanager {
         } catch (ExecutionException ignored) {
         }
         return sendTokenToServer.getSql();
+    }
+
+    static void updateFcmToken(final String cust_id){
+        try{
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                //Log.i("FCM", "getInstanceId failed", task.getException());
+                                return;
+                            }
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            Log.i("FCM","token -> "+token);
+                            String sql=auxiliaryfcmmanager.sendTokenToServer(auxiliary.SERVER_URL+"/fcmTokenManagement.php"
+                                    ,cust_id
+                                    ,token);
+                            Log.i("FCM","sql -> "+sql);
+                        }
+                    });
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

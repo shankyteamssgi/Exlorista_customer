@@ -21,4 +21,5 @@
     <color name="blackColor">#000000</color>
     <color name="whiteColor">#ffffff</color>
     <color name="fadeBlack">#696969</color>
+    <color name="lightGray">#F0F0F0</color>
 </resources>

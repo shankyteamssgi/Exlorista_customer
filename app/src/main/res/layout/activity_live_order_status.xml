@@ -49,6 +49,12 @@
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
                 android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderPlacedPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:visibility="gone"/>
         </LinearLayout>
         <TextView
             android:id="@+id/orderPlacedDescTV"
@@ -56,7 +62,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blackColor"
             android:fontFamily="@font/comfortaa_bold"
-            android:visibility="visible"/>
+            android:text=""
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout
@@ -87,6 +94,12 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
+                android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderAcceptedPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
                 android:visibility="gone"/>
         </LinearLayout>
         <TextView
@@ -120,13 +133,47 @@
                 android:textColor="@color/blackColor"
                 android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
-                android:text="checking availability" />
+                android:text="availability check" />
             <ImageView
+                android:id="@+id/orderAvailabilityCheck_checkMarkIV"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
                 android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderAvailabilityCheckPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:visibility="gone"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/orderAvailabilityCheckDescTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blackColor"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="Store has accepted your order"
+            android:visibility="gone"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/orderAvailabilityCheckProceedAnywaysB"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Proceed anyways"/>
+            <Button
+                android:id="@+id/orderAvailabilityCheckCancelOrderB"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Cancel order"/>
         </LinearLayout>
         <!--Add a recyclerview here-->
     </LinearLayout>
@@ -160,6 +207,12 @@
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
                 android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderPackagedPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:visibility="gone"/>
         </LinearLayout>
         <TextView
             android:id="@+id/orderPackagedDescTV"
@@ -172,7 +225,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/orderDispatchedLL"
+        android:id="@+id/orderHandoverLL"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -184,7 +237,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/orderDispatchedTV"
+                android:id="@+id/orderHandoverTV"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
@@ -192,31 +245,37 @@
                 android:textColor="@color/blackColor"
                 android:fontFamily="@font/comfortaa_bold"
                 android:textAllCaps="true"
-                android:text="order dispatched" />
+                android:text="order handover" />
             <ImageView
-                android:id="@+id/orderDispatched_checkMarkIV"
+                android:id="@+id/orderHandover_checkMarkIV"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
                 android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderHandoverPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:visibility="gone"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/orderDispatchedDescTV"
+            android:id="@+id/orderHandoverDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/blackColor"
             android:fontFamily="@font/comfortaa_bold"
-            android:text="Order has been dispatched"
+            android:text=""
             android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/orderArrivedLL"
+        android:id="@+id/orderCancelledLL"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/orderDispatchedLL"
+        app:layout_constraintTop_toBottomOf="@id/orderHandoverLL"
         android:layout_marginTop="40dp"
         android:background="@drawable/top_bottom_border">
         <LinearLayout
@@ -224,7 +283,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/orderArrivedTV"
+                android:id="@+id/orderCancelledTV"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
@@ -232,22 +291,28 @@
                 android:fontFamily="@font/comfortaa_bold"
                 android:textSize="16sp"
                 android:textAllCaps="true"
-                android:text="order arrived" />
+                android:text="order cancelled" />
             <ImageView
-                android:id="@+id/orderArrived_checkMarkIV"
+                android:id="@+id/orderCancelled_checkMarkIV"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:src="@drawable/checkmark_edited"
                 android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/orderCancelledPB"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:visibility="gone"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/orderArrivedDescTV"
+            android:id="@+id/orderCancelledDescTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/blackColor"
             android:fontFamily="@font/comfortaa_bold"
-            android:text="Your order has arrived"
+            android:text=""
             android:visibility="gone"/>
     </LinearLayout>
 

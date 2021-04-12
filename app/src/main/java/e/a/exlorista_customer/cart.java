@@ -88,6 +88,7 @@ public class cart extends AppCompatActivity implements CartProductsAdapter.CartP
                         cart.this.startActivity(cartToLoginOrSignupIntent);*/
                         // The below bypass is for testing purposes
                         // as long as payment has not been implemented
+                        /*
                         Intent bypassToLiveOrderStatus=new Intent(cart.this,liveOrderStatus.class);
                         bypassToLiveOrderStatus.putExtra(auxiliary.STORE_ID,storeIdInCart);
                         bypassToLiveOrderStatus.putExtra(auxiliary.DUMMYKEY_CUSTID,auxiliary.DUMMYVAL_CUSTID);
@@ -95,7 +96,9 @@ public class cart extends AppCompatActivity implements CartProductsAdapter.CartP
                         bypassToLiveOrderStatus.putExtra(auxiliary.CART_TOTAL,Integer.toString(cart_total));
                         bypassToLiveOrderStatus.putExtra(auxiliary.CART_DELIVERYCHARGE,Integer.toString(cart_deliveryCharge));
                         bypassToLiveOrderStatus.putExtra(auxiliary.CART_GRANDTOTAL,Integer.toString(cart_grandTotal));
-                        startActivity(bypassToLiveOrderStatus);
+                        startActivity(bypassToLiveOrderStatus);*/
+                        Intent cartToLoginOrSignupIntent=new Intent(cart.this,loginOrSignup.class);
+                        startActivity(cartToLoginOrSignupIntent);
                     }
                 });
             }

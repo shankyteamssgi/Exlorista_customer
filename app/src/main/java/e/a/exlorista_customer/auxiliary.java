@@ -113,9 +113,11 @@ class auxiliary{
     static String PPK_ORDERTOTAL="orderTotal";
     static String PPK_ORDERDELIVERYCHARGE="orderDeliveryCharge";
     static String PPK_ORDERGRANDTOTAL="orderGrandTotal";
+    static String PPK_ORDERDIFFPROD="orderDiffProd";
     static String PPK_CUSTADDRID="custaddrId";
     static String PPK_PAYMID="paymId";
     static String PPV_REQUESTTYPE_ORDERPLACEMENT="10";
+    static String PPV_REQUESTTYPE_FETCHTRACKABLEORDERS="11";
 
     // auxiliaryfcmmanager.java (usage in liveOrderStatus)
     static String PPK_FCMTOKEN="fcmToken";
@@ -124,6 +126,14 @@ class auxiliary{
 
     // liveOrderStatus.java
     static String DEFAULT_TOPIC="defaultTopic";
+    static String PPK_ORDERSTATUS="orderStatus";
+    static String PPV_ORDERSTATUS_PLACED="orderStatusPlaced";
+    static String PPV_ORDERSTATUS_ACCEPTED="orderStatusAccepted";
+    static String PPV_ORDERSTATUS_CANCELLED="orderStatusCancelled";
+    static String PPV_ORDERSTATUS_PENDING="orderStatusPending";
+    static String PPV_ORDERSTATUS_CONFIRMED="orderStatusConfirmed";
+    static String PPV_ORDERSTATUS_PACKAGED="orderStatusPackaged";
+    static String PPV_ORDERSTATUS_HANDOVER="orderStatusHandover";
 
     // auxiliaryaddressbook.java
     static String PPV_REQUESTTYPE_ADDRESSBOOKFETCH="51";
@@ -159,7 +169,7 @@ class auxiliary{
     static int LANDMARK_MAXLENGTH=50;
     static int CUSTOMTAG_MAXLENGTH=30;
 
-    // orderHistoryAdapter -> orderDetail.java
+    // (orderHistoryAdapter -> orderDetail) | payment
     static String ORDER_ID="orderId";
     static String ORDER_STATUS="orderStatus";
     static String ORDER_TOTAL="orderTotal";
@@ -194,6 +204,22 @@ class auxiliary{
     final static String DELIVERYDATETIME="delivery_datetime";
     final static String PPK_DELIVERYTYPEID="deliveryTypeId";
 
+    // deliveryType + payment + auxiliaryordermanagement.java
+    final static String PPK_DELIVERYTYPE="deliveryType";
+    final static String PPV_DELIVERYTYPE_INSTANT="deliveryType_instant";
+    final static String PPV_DELIVERYTYPE_SLOTTED="deliveryType_slotted";
+    final static String PPV_DELIVERYTYPE_SCHEDULED="deliveryType_scheduled";
+    final static String PPV_DELIVERYTYPE_TAKEAWAY="deliveryType_takeaway";
+    // General
+    final static String PPK_ORDERID="orderId";
+
+    // payment
+    final static String PPK_PAYMENTID="paymentId";
+    final static String PPK_PAYMENTMETHODID="paymentMethodId";
+    final static String PPK_PAYMENTSTATUSID="paymentStatusId";
+    final static String PPV_REQUESTTYPE_PAYMENTRECORDCREATE="81";
+    final static String PPV_REQUESTTYPE_PAYMENTRECORDASSIGNORDERID="82";
+
     // MainActivity.java -> loginOrSignup.java
     final static String NAVBUTTON_CLICKED="navButton_clicked";
     final static String NAV_LOGINB="nav_loginButton";
@@ -202,6 +228,12 @@ class auxiliary{
     //intent (loginOrSignup.java -> phoneVerification.java)
     static String SELECTED_OPTION="selectedOption";
     static String CONTINUE_WITH="continueWith";
+
+    // Volley test
+    static String PPK_VOLLEYTEST="volleyTest";
+
+    // General use
+    static String FROM_ACTIVITY="fromActivity";
 
     // Request validation from client
     // PPK -> POST parameter keys

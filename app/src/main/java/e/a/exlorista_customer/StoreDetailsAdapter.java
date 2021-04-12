@@ -82,7 +82,8 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         this.storeTiming=new ArrayList<>();
         this.storeImgPath=new ArrayList<>();
         this.storeImg=new ArrayList<>();
-        this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
+        String server_response=this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
+        Log.i("SDA server response",server_response);
         //initilize the dialog
         progressDialog = new ProgressDialog((Activity) mContext);
     }
@@ -130,8 +131,10 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         return storeImg.size();
     }
 
-    private void getStoreDetails(final String urlWebService){
+    private String getStoreDetails(final String urlWebService){
         class GetStoreDetails extends AsyncTask<Void, Void, Void>{
+
+            StringBuilder server_resonse=new StringBuilder();
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -156,10 +159,12 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json);
                     }
+                    server_resonse.append(sb.toString().trim());
                     if(!sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_FAIL) &&
                             !sb.toString().trim().equals(auxiliary.PPK_INITIAL_CHECK_NOT_SET)) {
                         //Log.i("CONTROL","PPK pass");
                         JSONArray jsonArray = new JSONArray(sb.toString().trim());
+                        Log.i("SDA jsonArray length",Integer.toString(jsonArray.length()));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject obj = jsonArray.getJSONObject(i);
                             storeId.add(obj.getString("store_id"));
@@ -189,19 +194,24 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
                     }
                 } catch (JSONException e) {
                     //Log.i("exception","JSONException occurred in GetStoreDetails");
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 } catch (MalformedURLException mue){
                     //Log.i("exception","MalformedURLException occurred in GetStoreDetails");
-                    //mue.printStackTrace();
+                    mue.printStackTrace();
                 } catch (IOException io){
                     //Log.i("exception","IOException occurred in GetStoreDetails");
-                    //io.printStackTrace();
+                    io.printStackTrace();
                 } catch (Exception e){
                     //Log.i("exception","Exception occurred in GetStoreDetails");
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
                 return null;
             }
+
+            public String getServerResponse(){
+                return server_resonse.toString().trim();
+            }
+
         }
         GetStoreDetails getStoreDetails=new GetStoreDetails();
         try{
@@ -213,6 +223,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
             //Log.i("execution","ExecutionException occurred in GetStoreDetails");
             //ee.printStackTrace();
         }
+        return getStoreDetails.getServerResponse();
     }
 
     private void storeClicked(String store_id,

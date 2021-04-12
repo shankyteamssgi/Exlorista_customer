@@ -205,6 +205,11 @@ class auxiliaryuseraccountmanager {
         return null;
     }
 
+    static String getUserIdFromSP(Context context){
+        return context.getSharedPreferences(SPFILE_USERACCOUNTDATA,Context.MODE_PRIVATE)
+                .getString(SPKEY_CUSTID,null);
+    }
+
     static String getSignInStatus(Context context){
         SharedPreferences signInStatusSP=context
                 .getSharedPreferences(auxiliaryuseraccountmanager.SPFILE_SIGNINSTATUS,Context.MODE_PRIVATE);

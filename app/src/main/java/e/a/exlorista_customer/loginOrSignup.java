@@ -56,13 +56,16 @@ public class loginOrSignup extends AppCompatActivity {
     SignInButton signInGoogleNewwSIB;
     LoginButton signInFacebookNewwLB;
     TextView loginTV,signupTV,orNewwTV;
-    EditText phoneNoNewwET;
-    LinearLayout continueWithGoogleLL, continueWithFacebookLL, phoneLoginNewwLL;
-    Button phoneLoginNewwB;
+    EditText phoneNoNewwET, userFullNameNewwET;
+    LinearLayout continueWithGoogleLL, continueWithFacebookLL, phoneLoginNewwLL, proceedToSignUpNewwLL;
+    Button phoneLoginNewwB, proceedToSignUpNewwB;
 
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     CallbackManager mCallbackManager;
+
+    Bundle extras;
+    String navButton_clicked;
 
     private final Context mContext=this;
     //private enum options{LOGIN,SIGNUP};
@@ -74,6 +77,8 @@ public class loginOrSignup extends AppCompatActivity {
         setContentView(R.layout.activity_login_or_signup);
         //getSupportActionBar().hide();
 
+        extras=getIntent().getExtras();
+
         auxiliaryuseraccountmanager.LoggedInWith loggedInWith=auxiliaryuseraccountmanager.userSignedIn(mContext);
         String signInStatus=auxiliaryuseraccountmanager.getSignInStatus(mContext);
         if(signInStatus!=null){
@@ -83,7 +88,20 @@ public class loginOrSignup extends AppCompatActivity {
                         auxiliaryuseraccountmanager.signOutOGC(mContext,getString(R.string.default_web_client_id),false);
                         break;
                     case auxiliaryuseraccountmanager.VALID_SIGNIN:
-                        proceedToPaymentActivity();
+                        //proceedToPaymentActivity();
+                        if(extras!=null){
+                            if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                // Previous activity is MainActivity
+                                finish();
+                            } else{
+                                // Previous activity is cart
+                                proceedToPaymentActivity();
+                            }
+                        } else{
+                            // Previous activity is cart
+                            proceedToPaymentActivity();
+                        }
+                        //finish();
                         break;
                 }
             } else{
@@ -104,15 +122,18 @@ public class loginOrSignup extends AppCompatActivity {
         signupTV=findViewById(R.id.signupTV);
         orNewwTV=findViewById(R.id.orNewwTV);
         phoneNoNewwET=findViewById(R.id.phoneNoNewwET);
+        userFullNameNewwET=findViewById(R.id.userFullNameNewwET);
         continueWithGoogleLL=findViewById(R.id.continueWithGoogleLL);
         continueWithFacebookLL=findViewById(R.id.continueWithFacebookLL);
         phoneLoginNewwLL=findViewById(R.id.phoneLoginNewwLL);
         phoneLoginNewwB=findViewById(R.id.phoneLoginNewwB);
+        proceedToSignUpNewwLL=findViewById(R.id.proceedToSignUpNewwLL);
+        proceedToSignUpNewwB=findViewById(R.id.proceedToSignUpNewwB);
         signInGoogleNewwSIB=findViewById(R.id.signInGoogleNewwSIB);
         signInFacebookNewwLB=findViewById(R.id.signInFacebookNewwLB);
 
         selectedOption=auxiliaryuseraccountmanager.options.LOGIN;
-
+        
         loginTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,8 +144,8 @@ public class loginOrSignup extends AppCompatActivity {
                 signupTV.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                 signupTV.setTextColor(getResources().getColor(R.color.colorProductBrand));
                 signupTV.setTextSize(14);
-                orNewwTV.setVisibility(View.VISIBLE);
                 phoneLoginNewwLL.setVisibility(View.VISIBLE);
+                proceedToSignUpNewwLL.setVisibility(View.GONE);
             }
         });
         signupTV.setOnClickListener(new View.OnClickListener() {
@@ -137,16 +158,17 @@ public class loginOrSignup extends AppCompatActivity {
                 loginTV.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                 loginTV.setTextColor(getResources().getColor(R.color.colorProductBrand));
                 loginTV.setTextSize(14);
-                orNewwTV.setVisibility(View.GONE);
+                proceedToSignUpNewwLL.setVisibility(View.VISIBLE);
                 phoneLoginNewwLL.setVisibility(View.GONE);
+                
             }
         });
 
         try{
-            Bundle extras=getIntent().getExtras();
             if(extras!=null){
                 if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
-                    String navButton_clicked=extras.getString(auxiliary.NAVBUTTON_CLICKED);
+                    // Previous activity is MainActivity
+                    navButton_clicked=extras.getString(auxiliary.NAVBUTTON_CLICKED);
                     switch (navButton_clicked){
                         case auxiliary.NAV_LOGINB:
                             loginTV.performClick();
@@ -155,7 +177,13 @@ public class loginOrSignup extends AppCompatActivity {
                             signupTV.performClick();
                             break;
                     }
+                } else{
+                    // Previous activity is cart
+                    loginTV.performClick();
                 }
+            } else{
+                // Previous activity is cart
+                loginTV.performClick();
             }
         } catch (NullPointerException ignored){
         } catch (Exception ignored){
@@ -226,6 +254,21 @@ public class loginOrSignup extends AppCompatActivity {
                     } else{
                         Toast.makeText(mContext,R.string.phone_does_not_exist,Toast.LENGTH_LONG).show();
                     }
+                }
+            }
+        });
+        proceedToSignUpNewwB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userFullName=userFullNameNewwET.getText().toString().trim();
+                if(!userFullName.isEmpty()){
+                    proceedToPhoneVerificationActivity(auxiliaryuseraccountmanager.options.SIGNUP
+                            ,null
+                            ,userFullName
+                            ,null
+                            ,null);
+                } else{
+                    userFullNameNewwET.setError("Name cannot be empty");
                 }
             }
         });
@@ -341,6 +384,7 @@ public class loginOrSignup extends AppCompatActivity {
                                     auxiliary.SERVER_URL+"/userManagement.php"
                                     ,auxiliary.PPK_EMAIL
                                     ,user.getEmail());
+                            auxiliaryfcmmanager.updateFcmToken(userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID));
                             auxiliaryuseraccountmanager.addUserDetailsToSP(mContext,
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID),
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL),
@@ -348,7 +392,18 @@ public class loginOrSignup extends AppCompatActivity {
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER));
                             //Log.i("AUTH","fetched phone : "+((userPhoneNumber==null||userPhoneNumber.equals(""))?"":userPhoneNumber));
                             auxiliaryuseraccountmanager.setSignInStatus(mContext,auxiliaryuseraccountmanager.VALID_SIGNIN);
-                            proceedToPaymentActivity();
+                            //proceedToPaymentActivity();
+                            if(extras!=null){
+                                if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                    // Previous activity is MainActivity
+                                    finish();
+                                } else{
+                                    proceedToPaymentActivity();
+                                }
+                            } else{
+                                proceedToPaymentActivity();
+                            }
+                            //finish();
                         } else{
                             //Log.i("AUTH","Inside else");
                             proceedToPhoneVerificationActivity(auxiliaryuseraccountmanager.options.SIGNUP/*because user does not exist
@@ -369,13 +424,25 @@ public class loginOrSignup extends AppCompatActivity {
                                     auxiliary.SERVER_URL+"/userManagement.php"
                                     ,auxiliary.PPK_FACEBOOKUSERID
                                     ,auxiliaryuseraccountmanager.getFacebookUserId());
+                            auxiliaryfcmmanager.updateFcmToken(userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID));
                             auxiliaryuseraccountmanager.addUserDetailsToSP(mContext,
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID),
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL),
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME),
                                     userDetailInDb.get(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER));
                             auxiliaryuseraccountmanager.setSignInStatus(mContext,auxiliaryuseraccountmanager.VALID_SIGNIN);
-                            proceedToPaymentActivity();
+                            //proceedToPaymentActivity();
+                            if(extras!=null){
+                                if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                    // Previous activity is MainActivity
+                                    finish();
+                                } else{
+                                    proceedToPaymentActivity();
+                                }
+                            } else{
+                                proceedToPaymentActivity();
+                            }
+                            //finish();
                         } else{
                             proceedToPhoneVerificationActivity(auxiliaryuseraccountmanager.options.SIGNUP/*because user does not exist
                             in database and will have to signup*/
@@ -443,6 +510,10 @@ public class loginOrSignup extends AppCompatActivity {
         loginOrSignupToPhoneVerificationIntent.putExtra(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME,displayName);
         loginOrSignupToPhoneVerificationIntent.putExtra(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER,phone);
         loginOrSignupToPhoneVerificationIntent.putExtra(auxiliaryuseraccountmanager.DETAILTYPE_FACEBOOKUSERID,facebookUserId);
+        if(navButton_clicked!=null){
+            // Previous activity is MainActivity
+            loginOrSignupToPhoneVerificationIntent.putExtra(auxiliary.NAVBUTTON_CLICKED,navButton_clicked);
+        }
         startActivity(loginOrSignupToPhoneVerificationIntent);
         finish();
     }

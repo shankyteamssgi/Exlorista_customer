@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.facebook.AccessToken;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
@@ -45,16 +46,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import e.a.exlorista_customer.NetworkManagers.VolleyNM;
+
 public class payment extends AppCompatActivity {
 
     RadioGroup choosePaymentMethodRG;
+    RadioButton payAtStoreRB;
     TextView cartItemCount_paymentTV,cartGrandTotalAmount_paymentTV;
     Button cartProceed_paymentB;
 
     ArrayList<String[]> paymMetIdAndName;
     ArrayList<RadioButton> paymMethods;
     String selectedPaymMetId;
-    boolean paymentIsSuccessful;
+
+    int paymentIsSuccessful;
+    // paymentIsSuccessful can assume 4 values:
+    // -2 -> Initial value. Attempt not made yet.
+    // -1 -> No need to pay in the app.
+    // 0 -> Payment failed.
+    // 1 -> Payment succeeded.
+
+
     String paymentId;
 
     Context mContext;
@@ -76,25 +88,58 @@ public class payment extends AppCompatActivity {
             deliveryTypeId=extras.getString(auxiliary.DELIVERYTYPEID);
         }
 
-        paymentIsSuccessful=false;
-
         choosePaymentMethodRG=findViewById(R.id.choosePaymentMethodRG);
+        payAtStoreRB=findViewById(R.id.payAtStoreRB);
         cartItemCount_paymentTV=findViewById(R.id.cartItemCount_paymentTV);
         cartGrandTotalAmount_paymentTV=findViewById(R.id.cartGrandTotalAmount_paymentTV);
         cartProceed_paymentB=findViewById(R.id.cartProceed_paymentB);
 
         assignCartValuesInBottomSheet();
 
-        populateEligiblePaymentMethods();
+        //populateEligiblePaymentMethods();
+
+        paymentIsSuccessful=-2;
 
         cartProceed_paymentB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(paymentIsSuccessful && validateInput()){
-                    auxiliaryordermanagement.placeOrderWrapper(mContext,paymentId);
-                    updateFcmToken();
-                    auxiliarycart.clearCart(mContext);
-                    proceedToLiveOrderStatus();
+                if(validateInput()){
+                    if(paymentIsSuccessful==1 || paymentIsSuccessful==-1){
+                        VolleyNM.requestDynamic(VolleyNM.HttpMethod.POST
+                                , auxiliary.SERVER_URL + "/paymentManagement.php"
+                                , new HashMap<String, String>() {
+                                    {
+                                        put(auxiliary.PPK_REQUESTTYPE, auxiliary.PPV_REQUESTTYPE_PAYMENTRECORDCREATE);
+                                    }
+                                }
+                                ,new VolleyNM.ServerCallback() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        String payment_id=response;
+                                        //Log.i("payment (payment_id)",payment_id);
+                                        String order_id=auxiliaryordermanagement.placeOrderWrapper(mContext,payment_id);
+                                        auxiliaryfcmmanager.updateFcmToken(auxiliaryuseraccountmanager.getUserIdFromSP(mContext));
+                                        assignOrderIdToPaymentRecord(payment_id,order_id);
+                                        auxiliarycart.clearCart(mContext);
+                                        proceedToLiveOrderStatus(order_id);
+                                    }
+
+                                    @Override
+                                    public void onEmptyResult() {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(VolleyError ve) {
+                                        ve.printStackTrace();
+                                    }
+                                });
+                    }
                 }
             }
         });
@@ -103,9 +148,9 @@ public class payment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // IMPLEMENTATION INCOMPLETE
-        // Implementation will depend on the flow of this activity
-        if(!paymentIsSuccessful){
-            auxiliarycart.clearCart(mContext);
+        // Implementation will depend on the flow of this activity, payment gateway implementation.
+        if(!(paymentIsSuccessful==1)){
+            finish();
         }
     }
 
@@ -133,35 +178,11 @@ public class payment extends AppCompatActivity {
         // Implementation of this method is dependent on implementation of payment gateway.
         // Here, assign relevant values to paymentIsSuccessful and paymentId
     }
-    
-    private void updateFcmToken(){
-        try{
-            FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful()) {
-                                //Log.i("FCM", "getInstanceId failed", task.getException());
-                                return;
-                            }
-                            // Get new Instance ID token
-                            String token = task.getResult().getToken();
-                            Log.i("FCM","token -> "+token);
-                            String sql=auxiliaryfcmmanager.sendTokenToServer(auxiliary.SERVER_URL+"/fcmTokenManagement.php"
-                                    ,auxiliary.DUMMYVAL_CUSTID
-                                    ,token);
-                            Log.i("FCM","sql -> "+sql);
-                        }
-                    });
-        } catch (NullPointerException npe){
-            npe.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     private boolean validateInput(){
         boolean input_validation=true;
+        /*
+        Use this if there are multiple payment options
         if(choosePaymentMethodRG.getCheckedRadioButtonId()==-1){
             input_validation=false;
             Toast.makeText(mContext,"Payment method not selected",Toast.LENGTH_LONG).show();
@@ -173,11 +194,20 @@ public class payment extends AppCompatActivity {
                 }
             }
         }
+         */
+        // Below is for single payment method only (i.e., Pay at store)
+        if(payAtStoreRB.isChecked()){
+            paymentIsSuccessful=-1;
+        } else{
+            input_validation=false;
+            Toast.makeText(mContext,"Payment method not selected",Toast.LENGTH_LONG).show();
+        }
         return input_validation;
     }
 
-    private void proceedToLiveOrderStatus(){
+    private void proceedToLiveOrderStatus(String order_id){
         Intent paymentToLiveOrderStatusIntent=new Intent(payment.this,liveOrderStatus.class);
+        paymentToLiveOrderStatusIntent.putExtra(auxiliary.ORDER_ID,order_id);
         startActivity(paymentToLiveOrderStatusIntent);
     }
 
@@ -232,6 +262,70 @@ public class payment extends AppCompatActivity {
             e.printStackTrace();
         }
         return getPaymMetIdAndNameFromDb.getPaymMetIdAndName();
+    }
+
+    private String createPaymentRecordAST(){
+        class CreatePaymentRecordAST extends AsyncTask<Void,Void,Void>{
+            StringBuilder payment_id=new StringBuilder();
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try{
+                    URL url = new URL(auxiliary.SERVER_URL+"/paymentManagement.php");
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setDoOutput(true);
+                    con.setRequestMethod("POST");
+                    con.connect();
+                    DataOutputStream dos = new DataOutputStream(con.getOutputStream());
+                    dos.writeBytes(auxiliary.postParamsToString(new HashMap<String, String>() {
+                        {
+                            put(auxiliary.PPK_INITIAL_CHECK, auxiliary.PPV_INITIAL_CHECK);
+                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_PAYMENTRECORDCREATE);
+                        }
+                    }));
+                    dos.flush();
+                    dos.close();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json);
+                    }
+                    payment_id.append(sb.toString().trim());
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                return null;
+            }
+            private String getPaymentId(){
+                return payment_id.toString().trim();
+            }
+        }
+        CreatePaymentRecordAST createPaymentRecordAST=new CreatePaymentRecordAST();
+        try {
+            createPaymentRecordAST.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return createPaymentRecordAST.getPaymentId();
+    }
+
+    private void assignOrderIdToPaymentRecord(final String payment_id,
+                                              final String order_id){
+        try{
+            VolleyNM.request(VolleyNM.HttpMethod.POST
+                    ,auxiliary.SERVER_URL+"/paymentManagement.php"
+                    ,new HashMap<String, String>(){
+                        {
+                            put(auxiliary.PPK_REQUESTTYPE,auxiliary.PPV_REQUESTTYPE_PAYMENTRECORDASSIGNORDERID);
+                            put(auxiliary.PPK_PAYMENTID,payment_id);
+                            put(auxiliary.PPK_ORDERID,order_id);
+                        }
+                    });
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

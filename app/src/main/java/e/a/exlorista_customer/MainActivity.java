@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -213,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId()==IDHamburgerOption.get("cart")){
             Log.i("DEBUG-MainActivity","cart, click detected");
             startActivity(new Intent(this,cart.class));
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if(item.getItemId()==IDHamburgerOption.get("track order")){
+            startActivity(new Intent(this,trackOrder.class));
             drawer.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==IDHamburgerOption.get("order history")){
@@ -524,6 +529,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent MainActivityToLoginOrSignupIntent=new Intent(MainActivity.this,loginOrSignup.class);
                 MainActivityToLoginOrSignupIntent.putExtra(auxiliary.NAVBUTTON_CLICKED,auxiliary.NAV_LOGINB);
                 startActivity(MainActivityToLoginOrSignupIntent);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
         navSignupB.setOnClickListener(new View.OnClickListener() {
@@ -532,13 +538,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent MainActivityToLoginOrSignupIntent=new Intent(MainActivity.this,loginOrSignup.class);
                 MainActivityToLoginOrSignupIntent.putExtra(auxiliary.NAVBUTTON_CLICKED,auxiliary.NAV_SIGNUPB);
                 startActivity(MainActivityToLoginOrSignupIntent);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
         navSignoutB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ProgressDialog progressDialog1=new ProgressDialog(mContext);
+                progressDialog1.show();
+                progressDialog1.setMessage(auxiliary.PROGRESS_DIALOG_MESSAGE);
                 clearUserDetailFromNavbar();
                 auxiliaryuseraccountmanager.signOutOGC(mContext,getString(R.string.default_web_client_id),false);
+                Handler handler=new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                },1000);
+                progressDialog1.dismiss();
             }
         });
     }

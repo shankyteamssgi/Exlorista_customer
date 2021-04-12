@@ -138,7 +138,6 @@
         android:text="OR"/>
 
     <LinearLayout
-        android:id="@+id/phoneLoginNewwLL"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -149,21 +148,50 @@
         android:layout_marginLeft="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/phoneNoNewwET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Enter 10 digit phone no" />
-        </android.support.design.widget.TextInputLayout>
-        <Button
-            android:id="@+id/phoneLoginNewwB"
+        <LinearLayout
+            android:id="@+id/phoneLoginNewwLL"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login with OTP"/>
+            app:layout_constraintTop_toBottomOf="@+id/orNewwTV">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/phoneNoNewwET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="Enter 10 digit phone no" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/phoneLoginNewwB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login with OTP"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/proceedToSignUpNewwLL"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/orNewwTV"
+            android:visibility="gone">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/userFullNameNewwET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Your full name" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/proceedToSignUpNewwB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="proceed To SignUp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

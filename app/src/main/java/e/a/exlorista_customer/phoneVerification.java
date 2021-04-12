@@ -258,6 +258,8 @@ public class phoneVerification extends AppCompatActivity {
                                                     auxiliary.SERVER_URL+"/userManagement.php"
                                                     ,auxiliary.PPK_PHONE
                                                     ,userPhoneNumber);
+                                            auxiliaryfcmmanager
+                                                    .updateFcmToken(userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID));
                                             auxiliaryuseraccountmanager.addUserDetailsToSP(mContext
                                                     ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID)
                                                     ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL)
@@ -269,7 +271,13 @@ public class phoneVerification extends AppCompatActivity {
                                                     ,extras.getString(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME)
                                                     ,userPhoneNumber);*/
                                             auxiliaryuseraccountmanager.setSignInStatus(mContext,auxiliaryuseraccountmanager.VALID_SIGNIN);
-                                            proceedToPaymentActivity();
+                                            if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                                // Activity previous to the login/signup flow is MainActivity
+                                                finish();
+                                            } else{
+                                                // Activity previous to the login/signup flow is cart
+                                                proceedToPaymentActivity();
+                                            }
                                         } else{
                                             // FAILED : user cannot be added to database
                                             Log.i("AUTH","User cannot be added");
@@ -288,13 +296,21 @@ public class phoneVerification extends AppCompatActivity {
                                                 auxiliary.SERVER_URL+"/userManagement.php"
                                                 ,auxiliary.PPK_PHONE
                                                 ,phoneNoReceived);
+                                        auxiliaryfcmmanager
+                                                .updateFcmToken(userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID));
                                         auxiliaryuseraccountmanager.addUserDetailsToSP(mContext
                                                 ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID)
                                                 ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL)
                                                 ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME)
                                                 ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER));
                                         auxiliaryuseraccountmanager.setSignInStatus(mContext,auxiliaryuseraccountmanager.VALID_SIGNIN);
-                                        proceedToPaymentActivity();
+                                        if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                            // Activity previous to the login/signup flow is MainActivity
+                                            finish();
+                                        } else{
+                                            // Activity previous to the login/signup flow is cart
+                                            proceedToPaymentActivity();
+                                        }
                                     } else{
                                         // Login : Google or Facebook
                                         if(auxiliaryuseraccountmanager.userExistsInDb(
@@ -332,13 +348,21 @@ public class phoneVerification extends AppCompatActivity {
                                                         auxiliary.SERVER_URL+"/userManagement.php"
                                                         ,auxiliary.PPK_PHONE
                                                         ,userPhoneNumber);
+                                                auxiliaryfcmmanager
+                                                        .updateFcmToken(userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID));
                                                 auxiliaryuseraccountmanager.addUserDetailsToSP(mContext
                                                         ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_CUSTID)
                                                         ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_EMAIL)
                                                         ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_DISPLAYNAME)
                                                         ,userDetailFromDb_HM.get(auxiliaryuseraccountmanager.DETAILTYPE_PHONENUMBER));
                                                 auxiliaryuseraccountmanager.setSignInStatus(mContext,auxiliaryuseraccountmanager.VALID_SIGNIN);
-                                                proceedToPaymentActivity();
+                                                if(extras.containsKey(auxiliary.NAVBUTTON_CLICKED)){
+                                                    // Activity previous to the login/signup flow is MainActivity
+                                                    finish();
+                                                } else{
+                                                    // Activity previous to the login/signup flow is cart
+                                                    proceedToPaymentActivity();
+                                                }
                                             } else{
                                                 // FAILED : user cannot be added to database
                                                 Log.i("AUTH","User cannot be added");
@@ -416,5 +440,11 @@ public class phoneVerification extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(auxiliaryuseraccountmanager.userSignedIn(mContext)!=null){
+            auxiliaryuseraccountmanager.signOut(mContext,getString(R.string.default_web_client_id),false);
+        }
+        Intent phoneVerificationTologinOrSignupIntent=new Intent(phoneVerification.this,loginOrSignup.class);
+        startActivity(phoneVerificationTologinOrSignupIntent);
+        finish();
     }
 }

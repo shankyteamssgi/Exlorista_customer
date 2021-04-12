@@ -6,4 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".trackOrder">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/noOrderToTrackLL"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/noOrderToTrackIV"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/noOrderToTrackTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@color/blackColor"
+                android:textSize="25dp"
+                android:text="No orders \nto track"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trackableOrdersRV"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:background="@color/lightGray"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
