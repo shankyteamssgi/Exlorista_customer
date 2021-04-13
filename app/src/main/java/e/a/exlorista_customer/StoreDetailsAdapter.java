@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+
+import e.a.exlorista_customer.NetworkManagers.VolleyNM;
 
 /**
  * Created by a on 1/13/2020.
@@ -82,6 +86,7 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
         this.storeTiming=new ArrayList<>();
         this.storeImgPath=new ArrayList<>();
         this.storeImg=new ArrayList<>();
+        //this.getStoreDetailsVolley(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
         String server_response=this.getStoreDetails(auxiliary.SERVER_URL+"/fetchStoreDetails.php");
         Log.i("SDA server response",server_response);
         //initilize the dialog
@@ -224,6 +229,75 @@ public class StoreDetailsAdapter extends RecyclerView.Adapter<StoreDetailsAdapte
             //ee.printStackTrace();
         }
         return getStoreDetails.getServerResponse();
+    }
+
+    private void getStoreDetailsVolley(String urlWebService){
+        VolleyNM.requestDynamic(VolleyNM.HttpMethod.POST
+                , urlWebService
+                , new HashMap<String, String>() {
+                    {
+                        put(auxiliary.PPK_INITIAL_CHECK, auxiliary.PPV_INITIAL_CHECK);
+                    }
+                }
+                , new VolleyNM.ServerCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        try{
+                            Log.i("SDA server response",response);
+                            JSONArray jsonArray = new JSONArray(response.toString().trim());
+                            Log.i("SDA jsonArray length",Integer.toString(jsonArray.length()));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject obj = jsonArray.getJSONObject(i);
+                                storeId.add(obj.getString("store_id"));
+                                storeName.add(obj.getString("store_name"));
+                                storeAddress.add(obj.getString("area_name"));
+                                storeTiming.add(getStoreTimingStringArray(obj));
+                                String dirPath = obj.getString("dirpath_path");
+                                String fileExt = obj.getString("fileext_name");
+                                String filePath = dirPath + obj.getString("store_id") + "." + fileExt;
+                                storeImgPath.add(filePath);
+                                VolleyNM.fetchImageRequest(auxiliary.SERVER_URL + filePath
+                                        , new VolleyNM.ImageFetchCallback() {
+
+                                            @Override
+                                            public void onSuccess(Bitmap response) {
+                                                storeImg.add(response);
+                                            }
+
+                                            @Override
+                                            public void onFailure() {
+                                                Log.i("SDA","Failure (Volley)");
+                                            }
+
+                                            @Override
+                                            public void onError(VolleyError ve) {
+                                                Log.i("SDA","VolleyError (Volley)");
+                                                ve.printStackTrace();
+                                            }
+                                        });
+                            }
+                        } catch (JSONException je){
+                            je.printStackTrace();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onEmptyResult() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+
+                    @Override
+                    public void onError(VolleyError ve) {
+
+                    }
+                });
     }
 
     private void storeClicked(String store_id,

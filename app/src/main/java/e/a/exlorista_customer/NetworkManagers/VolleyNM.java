@@ -1,5 +1,7 @@
 package e.a.exlorista_customer.NetworkManagers;
 
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -7,6 +9,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 
@@ -287,11 +290,41 @@ public class VolleyNM {
         requestQueue.add(stringRequest);
     }
 
+    public static void fetchImageRequest(String url,
+                                    final ImageFetchCallback imageFetchCallback){
+        ImageRequest imageRequest=new ImageRequest(url
+                , new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                if (response != null) {
+                    imageFetchCallback.onSuccess(response);
+                } else {
+                    imageFetchCallback.onFailure();
+                }
+            }
+        }
+                , 0
+                , 0
+                , null
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                imageFetchCallback.onError(error);
+            }
+        });
+    }
+
 
 
     public interface ServerCallback{
         void onSuccess(String response);
         void onEmptyResult();
+        void onFailure();
+        void onError(VolleyError ve);
+    }
+
+    public interface ImageFetchCallback{
+        void onSuccess(Bitmap response);
         void onFailure();
         void onError(VolleyError ve);
     }
